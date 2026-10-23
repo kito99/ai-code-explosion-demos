@@ -105,6 +105,8 @@ theme of the presentation.
   keyboard, and all game text meets a readable contrast against its background.
 - **NFR-4 — Clarity.** Messages use plain, friendly language and always tell the
   player what just happened and what they can do next.
+- **WFR-5 - Duke Images.** The game includes the official Duke image to 
+  represent the character (repository: https://github.com/openjdk/duke).
 
 ## 8. Assumptions
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+    <featureManager>
+        <feature>restfulWS-4.0</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>cdi-4.1</feature>
+        <feature>servlet-6.1</feature>
+    </featureManager>
+
+    <!--
+      Pinned to HTTP/1.1. Over plaintext, upgrading to HTTP/2 leaves the welcome-file
+      request for "/" without a response, which hangs any client that asks for the
+      upgrade, including curl and the JDK HTTP client. Browsers never ask for it over
+      plaintext, so the game plays the same either way.
+    -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="${http.port}"
+                  httpsPort="${https.port}"
+                  protocolVersion="http/1.1" />
+
+    <!--
+      The game lives in the session, and nothing about it needs to outlive the session.
+      The cookie is deliberately not marked Secure: the game is served over plaintext
+      locally, and a Secure cookie would never come back, so every request would be a
+      new player. Anything serving this over TLS should turn cookieSecure on.
+    -->
+    <httpSession cookieHttpOnly="true" cookieSameSite="Lax" />
+
+    <webApplication location="jakarta-ee-demo-claude-code-opus-5-1.war" contextRoot="/" />
+
+</server>

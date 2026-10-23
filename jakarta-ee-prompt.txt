@@ -1,0 +1,1 @@
+Generate an app for the given BRD.md file using OpenLiberty and JakartaEE for the backend.

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 250">
+    <title>Duke</title>
+    <path d="M100,14 L122,62 L78,62 Z" fill="#e0342b" stroke="#14263d" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M100,50 C126,50 139,67 141,82 C146,122 157,176 164,194 C169,205 163,214 152,214
+             L48,214 C37,214 31,205 36,194 C43,176 54,122 59,82 C61,67 74,50 100,50 Z"
+          fill="#ffffff" stroke="#14263d" stroke-width="10" stroke-linejoin="round"/>
+    <ellipse cx="86" cy="98" rx="6.5" ry="10" fill="#14263d"/>
+    <ellipse cx="114" cy="98" rx="6.5" ry="10" fill="#14263d"/>
+</svg>

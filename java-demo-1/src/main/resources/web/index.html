@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Number with Duke</title>
+  <meta name="description" content="Duke is thinking of a number between 1 and 10. Can you guess it in five tries?">
+  <link rel="icon" href="duke-icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="card" id="card">
+    <header class="card__header">
+      <p class="eyebrow">A plain-Java guessing game</p>
+      <h1>Guess the Number</h1>
+      <p class="tagline">Duke picked a whole number between <strong>1</strong> and <strong>10</strong>.
+        You get <strong>5</strong> tries.</p>
+    </header>
+
+    <div class="stage">
+      <svg class="duke" id="duke" viewBox="0 0 220 250" role="img"
+           aria-label="Duke, the Java mascot, thinking of a secret number">
+        <ellipse class="duke__shadow" cx="110" cy="224" rx="60" ry="10"></ellipse>
+        <g class="duke__jumper" id="duke-jumper">
+          <g class="duke__idle">
+            <path class="duke__arm" d="M68,108 C44,122 30,148 32,174"></path>
+            <g class="duke__arm-wave" id="duke-arm">
+              <path class="duke__arm" d="M152,108 C176,122 190,148 188,174"></path>
+            </g>
+            <ellipse class="duke__foot" cx="89" cy="211" rx="21" ry="11"></ellipse>
+            <ellipse class="duke__foot" cx="131" cy="211" rx="21" ry="11"></ellipse>
+            <path class="duke__body" d="M110,38 C128,38 140,52 144,72 C152,110 164,160 172,184 C178,202 158,208 110,208 C62,208 42,202 48,184 C56,160 68,110 76,72 C80,52 92,38 110,38 Z"></path>
+            <path class="duke__nose" d="M110,12 C117,12 125,26 128,40 C131,54 123,62 110,62 C97,62 89,54 92,40 C95,26 103,12 110,12 Z"></path>
+            <ellipse class="duke__eye" cx="96" cy="100" rx="9" ry="13"></ellipse>
+            <ellipse class="duke__eye" cx="125" cy="100" rx="9" ry="13"></ellipse>
+          </g>
+        </g>
+      </svg>
+
+      <p class="bubble" id="message" role="status" aria-live="polite">Waking Duke up&hellip;</p>
+    </div>
+
+    <div class="scoreboard">
+      <ul class="pips" id="pips" aria-hidden="true"></ul>
+      <p class="scoreboard__text" id="score">Guesses made: 0 &middot; Guesses remaining: 5</p>
+    </div>
+
+    <form class="guess-form" id="guess-form" autocomplete="off" novalidate>
+      <label class="guess-form__label" for="guess">Your guess (1&ndash;10)</label>
+      <div class="guess-form__row">
+        <input class="guess-form__input" id="guess" name="guess" type="text"
+               inputmode="numeric" autocomplete="off" autofocus>
+        <button class="btn btn--primary" id="submit" type="submit">Guess</button>
+      </div>
+    </form>
+
+    <button class="btn btn--ghost" id="play-again" type="button">Play again</button>
+  </main>
+
+  <footer class="colophon">
+    <p>Served by a plain Java backend on the JDK&rsquo;s built-in HTTP server.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

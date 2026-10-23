@@ -1,0 +1,17 @@
+target/
+
+# Liberty dev mode scratch
+.liberty/
+
+# Editors and IDEs
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# Browser automation scratch
+.playwright-mcp/
+
+.DS_Store

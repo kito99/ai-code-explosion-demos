@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+    <featureManager>
+        <feature>restfulWS-4.0</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>cdi-4.1</feature>
+        <feature>servlet-6.1</feature>
+    </featureManager>
+
+    <!--
+      Pinned to HTTP/1.1. Over plaintext, upgrading to HTTP/2 leaves the welcome-file
+      request for "/" without a response, which hangs any client that asks for the
+      upgrade, including curl and the JDK HTTP client. Browsers never ask for it over
+      plaintext, so the game itself is unaffected either way, and a single-player local
+      demo has nothing to gain from HTTP/2.
+    -->
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="${http.port}"
+                  httpsPort="${https.port}"
+                  protocolVersion="http/1.1" />
+
+    <!-- Each browser session gets its own game, and nothing needs to outlive the session. -->
+    <httpSession cookieHttpOnly="true" cookieSameSite="Lax" />
+
+    <webApplication location="jakarta-ee-demo-1.war" contextRoot="/" />
+
+</server>

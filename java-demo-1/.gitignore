@@ -1,0 +1,5 @@
+target/
+.playwright-mcp/
+.idea/
+*.iml
+.DS_Store

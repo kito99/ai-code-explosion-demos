@@ -1,3 +1,5 @@
-Generate an app based on the BRD.md file in this folder. The name of the project should be "java-demo-xx", where xx is equal to the suffix of the last demo + 1. For example, if the most recent demo is "java-demo-10", the folder name should be "java-demo-11." When you are finished, copy BRD.md into the new folder so we can keep track of the exact version used for the app.
+Generate an app based on the BRD.md file in this folder.
 
-In the README.md file, record the name of the agent harness, model, and date of generation.
+Use the project name prefix "java".
+
+Then follow the shared instructions in demo-prompt-common.md.

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="icon" href="duke-wave.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="game">
+    <header class="game__header">
+        <h1 class="game__title">Guess the Number with Duke</h1>
+        <p class="game__subtitle">
+            Duke is thinking of a whole number from
+            <strong data-field="lowestNumber">1</strong> to
+            <strong data-field="highestNumber">10</strong>.
+            You get <strong data-field="guessLimit">5</strong> guesses.
+        </p>
+    </header>
+
+    <div class="stage">
+        <img class="stage__duke"
+             data-element="duke"
+             src="duke-thinking.svg"
+             alt="Duke, the Java mascot, thinking of a number"
+             width="314"
+             height="320">
+    </div>
+
+    <p class="message" data-element="message" role="status">Starting a new game&hellip;</p>
+
+    <!-- novalidate: the server decides what counts as a guess, so its friendly
+         wording is what the player sees instead of a browser tooltip. -->
+    <form class="guess-form" data-element="guess-form" autocomplete="off" novalidate>
+        <label class="guess-form__label" for="guess">Your guess</label>
+        <input class="guess-form__input"
+               data-element="guess-input"
+               id="guess"
+               name="guess"
+               type="number"
+               inputmode="numeric"
+               min="1"
+               max="10"
+               step="1"
+               autofocus>
+        <button class="button button--primary" data-element="guess-button" type="submit">Guess</button>
+    </form>
+
+    <p class="scoreboard">
+        <span class="scoreboard__item">Guesses made
+            <strong class="scoreboard__value" data-field="guessesMade">0</strong></span>
+        <span class="scoreboard__item">Guesses left
+            <strong class="scoreboard__value" data-field="guessesRemaining">5</strong></span>
+    </p>
+
+    <button class="button" data-element="new-game" type="button">New game</button>
+
+    <noscript>
+        <p class="message message--problem">
+            This game needs JavaScript to talk to the server. Turn it on and reload the page to play.
+        </p>
+    </noscript>
+
+    <footer class="game__footer">
+        <p>Duke artwork from the <a href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.</p>
+    </footer>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

@@ -31,6 +31,10 @@ theme of the presentation.
 - A running count of guesses made and guesses remaining.
 - A limited number of guesses per game, with a lose state when they run out.
 - The ability to start a new game at any time.
+- Telemetry emitted by the running app so its behavior and health can be
+  observed.
+- An HTTP API for the server-side game actions, described by an OpenAPI
+  definition and browsable through interactive documentation.
 
 ### 4.2 Out of Scope
 
@@ -38,6 +42,9 @@ theme of the presentation.
 - Leaderboards or sharing scores with other people.
 - Difficulty levels or configurable number ranges or guess limits.
 - Multiplayer or turn-based play against other people.
+- A hosted, long-term telemetry store or dashboards built on top of it.
+- Versioning or backward-compatibility commitments to third-party consumers
+  of the API.
 
 ## 5. Stakeholders
 
@@ -105,8 +112,24 @@ theme of the presentation.
   keyboard, and all game text meets a readable contrast against its background.
 - **NFR-4 — Clarity.** Messages use plain, friendly language and always tell the
   player what just happened and what they can do next.
-- **WFR-5 - Duke Images.** The game includes the official Duke image to 
+- **NFR-5 - Duke Images.** The game includes the official Duke image to 
   represent the character (repository: https://github.com/openjdk/duke).
+- **NFR-6 — Observability.** The app is observable through telemetry it emits
+  while running. It produces traces, metrics, and structured logs covering the
+  game lifecycle and every API request, so someone can answer how often games
+  are started, won, and lost, how long requests take, and where errors come
+  from, without reading the source. Telemetry uses an open standard such as
+  OpenTelemetry so it can be sent to any compatible collector, and the
+  destination is configurable without a code change. Telemetry carries no
+  personally identifying information. When no collector is reachable, the game
+  still plays and still meets NFR-2, so telemetry delivery never delays player
+  feedback.
+- **NFR-7 — OpenAPI.** Every server-side game action the front-end performs is
+  available through an HTTP API described by an OpenAPI definition. The
+  definition is served by the running app, covers each endpoint's request shape,
+  response shape, and error responses, and stays in sync with the
+  implementation. The app also serves human-readable API documentation generated
+  from that definition so a developer can read and try the API in a browser.
 
 ## 8. Assumptions
 
@@ -124,3 +147,8 @@ theme of the presentation.
 - The guesses-remaining count is always accurate and never drops below zero.
 - Duke is clearly visible as the character thinking of the number, and plays his
   celebration animation when the player wins.
+- Playing games through to both a win and a loss produces telemetry covering
+  those outcomes and the API requests behind them, visible in a compatible
+  collector.
+- The running app serves an OpenAPI definition that matches its endpoints, along
+  with browsable documentation generated from it.

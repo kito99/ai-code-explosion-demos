@@ -4,8 +4,10 @@
 
 This document describes the business requirements for a small, web-based game
 where a player tries to guess a secret number between 1 and 10. Duke, the Java
-mascot, plays the role of the character who is thinking of the number. The game
-is meant to be simple, friendly, and fun, and it doubles as a demo.
+mascot, plays the role of the character who is thinking of the number. Players
+who win can post their score to a leaderboard that ranks wins by how few guesses
+they took. The game is meant to be simple, friendly, and fun, and it doubles as
+a demo.
 
 ## 2. Purpose and Background
 
@@ -18,6 +20,7 @@ theme of the presentation.
 
 - Give the player a quick, satisfying guessing game they can replay instantly.
 - Show Duke as the character who "knows" the secret number.
+- Give players a reason to replay by ranking wins by how few guesses they took.
 - Keep the whole thing simple enough to build and explain in a single sitting.
 
 ## 4. Scope
@@ -35,11 +38,19 @@ theme of the presentation.
   observed.
 - An HTTP API for the server-side game actions, described by an OpenAPI
   definition and browsable through interactive documentation.
+- A name entered by the player when they win, so their score can be posted.
+- A leaderboard of winning results that outlives the app process.
+- A screen that displays the leaderboard.
 
 ### 4.2 Out of Scope
 
-- User accounts, logins, or saved profiles.
-- Leaderboards or sharing scores with other people.
+- User accounts, logins, or saved profiles. The name a player types to post a
+  score is not an account, and no identity sits behind it; two players may use
+  the same name.
+- Editing or deleting leaderboard entries once they are posted.
+- Judging names by their content, such as screening for profanity. The only
+  checks applied to a name are the ones FR-14 describes.
+- Per-player history or statistics beyond the single list of best results.
 - Difficulty levels or configurable number ranges or guess limits.
 - Multiplayer or turn-based play against other people.
 - A hosted, long-term telemetry store or dashboards built on top of it.
@@ -85,8 +96,9 @@ theme of the presentation.
 ### 6.3 Ending a Round
 
 - **FR-9 — Win state.** When the player guesses the secret number, the system
-  congratulates them and shows how many guesses it took. No further guesses are
-  accepted until a new game starts.
+  congratulates them, shows how many guesses it took, and offers to post the
+  score to the leaderboard (see FR-13). No further guesses are accepted until a
+  new game starts.
 - **FR-10 — Win animation.** On a correct guess, Duke plays a short celebration
   animation to reward the player. Duke does a happy jump: he springs up and
   settles back down two or three times over roughly 1.5 seconds while waving an
@@ -100,6 +112,35 @@ theme of the presentation.
 - **FR-12 — Play again.** From either the win or lose state, and at any point
   during an active game, the player can start a fresh game. Starting a fresh game
   clears the previous feedback and result message and applies FR-1.
+
+### 6.4 Leaderboard
+
+- **FR-13 — Name capture on a win.** When the player wins, the system asks for a
+  name before recording the result. A name must be entered for the score to be
+  posted. The player can decline and start a new game (see FR-12), in which case
+  nothing is recorded.
+- **FR-14 — Name validation.** A name is accepted when it has at least one
+  visible character after surrounding whitespace is trimmed and is no longer than
+  30 characters. If it is not acceptable, the system shows a friendly message and
+  records nothing until a valid name is entered.
+- **FR-15 — Recording a result.** A posted result stores the name, the number of
+  accepted guesses the win took, and when it happened. Each winning game creates
+  its own entry; nothing is overwritten.
+- **FR-16 — No entry for a loss.** A game that ends in the lose state (see
+  FR-11) records nothing, because there is no winning guess count.
+- **FR-17 — Leaderboard screen.** A separate screen lists the best results,
+  showing each entry's rank, name, and number of guesses. It shows the top 10
+  entries, ordered by fewest guesses first, with ties broken by which was
+  recorded first.
+- **FR-18 — Empty leaderboard.** When nothing has been recorded yet, the screen
+  says no scores have been posted so far instead of showing an empty table.
+- **FR-19 — Navigation.** The player can reach the leaderboard from the game and
+  return to the game from the leaderboard. Returning may start a fresh game under
+  FR-1; no in-progress game needs to be preserved.
+- **FR-20 — Shared results.** The leaderboard reflects results recorded by every
+  player on that server. Opening or reloading the screen shows the results as
+  they stand at that moment, including any another player posted in the meantime.
+  A screen that is already open does not have to update on its own.
 
 ## 7. Non-Functional Requirements
 
@@ -130,12 +171,21 @@ theme of the presentation.
   response shape, and error responses, and stays in sync with the
   implementation. The app also serves human-readable API documentation generated
   from that definition so a developer can read and try the API in a browser.
+- **NFR-8 — Durable storage.** Leaderboard entries are kept in a database and
+  survive a restart of the app. Consistent with NFR-1, no specific database
+  product or data access technology is mandated by this document.
+- **NFR-9 — Name handling.** The name a player types is the only personal data
+  the app stores. It appears on the leaderboard and nowhere else; in particular
+  it is never written to telemetry, which NFR-6 requires to stay free of
+  personally identifying information.
 
 ## 8. Assumptions
 
 - The player is on a single device and plays one game at a time.
-- No data needs to persist between sessions; refreshing the page starts a new
-  game.
+- An in-progress game does not persist; refreshing the page starts a new game.
+  Leaderboard entries do persist (see NFR-8).
+- The app runs as a single instance against one database, so every player shares
+  the same leaderboard.
 - A suitable Duke image or graphic is available to display.
 
 ## 9. Success Criteria
@@ -152,3 +202,10 @@ theme of the presentation.
   collector.
 - The running app serves an OpenAPI definition that matches its endpoints, along
   with browsable documentation generated from it.
+- Winning and entering a valid name adds a leaderboard entry showing that name
+  and the right number of guesses, while losing adds nothing.
+- The leaderboard orders entries by fewest guesses, breaks ties by which was
+  recorded first, and shows no more than 10.
+- Leaderboard entries are still there after the app restarts.
+- With nothing recorded, the leaderboard screen explains that no scores have
+  been posted yet.

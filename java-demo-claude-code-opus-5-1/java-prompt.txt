@@ -1,5 +1,0 @@
-Generate an app based on the BRD.md file in this folder.
-
-Use the project name prefix "java".
-
-Then follow the shared instructions in demo-prompt-common.md.

@@ -1,5 +1,0 @@
-Generate an app based on the BRD.md file in this folder, using OpenLiberty and Jakarta EE for the backend.
-
-Use the project name prefix "jakarta-ee".
-
-Then follow the shared instructions in demo-prompt-common.md.

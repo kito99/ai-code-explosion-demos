@@ -198,8 +198,8 @@ theme of the presentation.
 - Duke is clearly visible as the character thinking of the number, and plays his
   celebration animation when the player wins.
 - Playing games through to both a win and a loss produces telemetry covering
-  those outcomes and the API requests behind them, visible in a compatible
-  collector.
+  those outcomes and the API requests behind them, visible wherever the app is
+  currently configured to send it.
 - The running app serves an OpenAPI definition that matches its endpoints, along
   with browsable documentation generated from it.
 - Winning and entering a valid name adds a leaderboard entry showing that name

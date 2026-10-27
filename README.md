@@ -7,13 +7,17 @@ models and the results compared side by side.
 
 ## Repo contents
 
-| File | What it is |
-| --- | --- |
-| `BRD.md` | The requirements every demo is built from. |
-| `java-prompt.txt` | Build the app in plain Java. |
-| `jakarta-ee-prompt.txt` | Build the app with OpenLiberty and Jakarta EE. |
-| `demo-prompt-common.md` | The instructions every prompt shares. |
-| `AGENTS.md` | The coding conventions agents follow. `CLAUDE.md` links to it. |
+| File                    | Description                                                         |
+|-------------------------|---------------------------------------------------------------------|
+| `BRD.md`                | The requirements every demo is built from.                          |
+| `java-prompt.txt`       | Build the app in plain Java.                                        |
+| `jakarta-ee-prompt.txt` | Build the app with OpenLiberty and Jakarta EE.                      |
+| `demo-prompt-common.md` | The instructions every prompt shares.                               |
+| `AGENTS.md`             | The coding conventions agents follow. `CLAUDE.md` links to it.      |
+| `.mcp.json`             | The Context7 MCP server for Claude Code                             |
+| `.claude/skills/`       | The Context7 skill that tells Claude when to reach for those docs.  |
+| `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                 |
+| `.bob/skills/`          | The Context7 skill that tells IBM Bob when to reach for those docs. |
 
 Each prompt is only three lines: the stack to build, the project name prefix to
 use, and a pointer to `demo-prompt-common.md` for everything else. That keeps the
@@ -38,14 +42,50 @@ Where none of those fit, `npm install -g cloc` works on any platform with Node
 installed. There is a `winget install AlDanial.Cloc` package too, but cloc's own
 documentation warns it may not work, so prefer Chocolatey or Scoop on Windows.
 
-Verify that installtion was successful prior to running a prompt:
+Verify that installation was successful prior to running a prompt:
 
 ```bash
 cloc --version
 ```
 
+Docker and Compose are also required, because the generated apps run PostgreSQL
+as a container:
+
+```bash
+docker compose version
+```
+
 Building and running a generated app requires a JDK and Maven. Which JDK depends on
 what the agent chose, so check the app's own README. (AGENTS.md specifies at least JDK 25.)
+
+A Context7 API key is required, because `.mcp.json` reads it from the
+environment. Create one at [context7.com/dashboard](https://context7.com/dashboard)
+and export it before starting your agent:
+
+```bash
+export CONTEXT7_API_KEY=your-key-here
+```
+
+Put that line in your shell profile so it survives a new terminal. The key is
+only read from the environment, so it never lands in a committed file.
+
+## Documentation lookups
+
+`.mcp.json` registers [Context7](https://context7.com) as this repository's MCP
+server, and `.claude/skills/context7-mcp` tells the agent when to use it. The
+point is that a generated app follows the current Open Liberty, Jakarta EE,
+MicroProfile, and PostgreSQL documentation rather than whatever the model
+remembers, which matters most for the specification APIs the prompts ask agents
+to favor.
+
+`.mcp.json` is Claude Code's project-scope config, and Claude Code asks you to
+approve a server that arrived through a checked-in file the first time you start
+it here. Other harnesses register MCP servers their own way, so Cursor wants
+`.cursor/mcp.json` and VS Code wants `.vscode/mcp.json`. Point yours at the same
+URL if the Context7 tools do not show up.
+
+If the server fails to start, `CONTEXT7_API_KEY` is almost certainly unset:
+the config expands it at startup and there is no fallback.
 
 ## How to run a prompt
 
@@ -76,3 +116,6 @@ Every directory carries copies of `BRD.md` and the prompt files it was built
 from, so each app records the exact requirements and instructions that produced
 it even after those files change here. Its own `README.md` has the build and run
 commands, along with the date, harness, model, and line counts.
+
+Each app brings its own `compose.yaml` for PostgreSQL, so check that app's
+README for its ports before running two demos at once.

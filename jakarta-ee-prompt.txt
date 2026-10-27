@@ -1,4 +1,6 @@
-Generate an app based on the BRD.md file in this folder using OpenLiberty, Jakarta EE, and MicroProfile for the backend.
+Generate an app based on the BRD.md file in this folder using Open Liberty, 
+Jakarta EE 11, and MicroProfile 7.1 for the backend. Always favor APIs from 
+those rather than hand-rolling a solution or using another library, if possible.
 
 Use the project name prefix "jakarta-ee".
 

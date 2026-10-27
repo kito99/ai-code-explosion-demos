@@ -15,9 +15,8 @@ models and the results compared side by side.
 | `demo-prompt-common.md` | The instructions every prompt shares.                               |
 | `AGENTS.md`             | The coding conventions agents follow. `CLAUDE.md` links to it.      |
 | `.mcp.json`             | The Context7 MCP server for Claude Code                             |
-| `.claude/skills/`       | The Context7 skill that tells Claude when to reach for those docs.  |
 | `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                 |
-| `.bob/skills/`          | The Context7 skill that tells IBM Bob when to reach for those docs. |
+| `.skills/`              | The Context7 skill. Both harnesses symlink to it.                   |
 
 Each prompt is only three lines: the stack to build, the project name prefix to
 use, and a pointer to `demo-prompt-common.md` for everything else. That keeps the
@@ -72,11 +71,17 @@ only read from the environment, so it never lands in a committed file.
 ## Documentation lookups
 
 `.mcp.json` registers [Context7](https://context7.com) as this repository's MCP
-server, and `.claude/skills/context7-mcp` tells the agent when to use it. The
+server, and `.skills/context7-mcp` tells the agent when to use it. The
 point is that a generated app follows the current Open Liberty, Jakarta EE,
 MicroProfile, and PostgreSQL documentation rather than whatever the model
 remembers, which matters most for the specification APIs the prompts ask agents
 to favor.
+
+Skills are standardized, so the one copy lives in `.skills` and each harness's
+own skills directory symlinks to it: both `.claude/skills` and `.bob/skills`
+point there. If your harness looks somewhere else, add another symlink rather
+than a second copy. Note that Windows needs Developer Mode or an elevated shell
+for Git to check symlinks out as links instead of plain text files.
 
 `.mcp.json` is Claude Code's project-scope config, and Claude Code asks you to
 approve a server that arrived through a checked-in file the first time you start

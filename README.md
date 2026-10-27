@@ -107,10 +107,10 @@ worked out by looking at the demo directories already here.
 ## The generated apps
 
 Each app lives in a directory named
-`[stack]-demo-[agent harness]-[model]-xx`, so
-`java-demo-claude-code-opus-5-1` is the first plain Java demo built by Claude
-Code using Claude Opus 5. The suffix counts up per combination of stack,
-harness, and model.
+`[prefix]-demo-[agent harness]-[model]-xx`, where the prefix is the one the
+prompt hands the agent. So `java-demo-claude-code-opus-5-1` is the first plain
+Java demo built by Claude Code using Claude Opus 5. The suffix counts up per
+combination of prefix, harness, and model.
 
 Every directory carries copies of `BRD.md` and the prompt files it was built
 from, so each app records the exact requirements and instructions that produced

@@ -8,10 +8,12 @@ prefix to use; everything else is below.
 
 The name of the project should be `[prefix]-demo-[agent harness]-[model]-xx`,
 using the prefix your prompt gave you, where `xx` is the suffix of the last demo
-with the same prefix, agent harness, and model, plus 1. For example, if the most
-recent matching demo is `java-demo-claude-opus-1`, the new folder is
-`java-demo-claude-opus-2`. If no demo exists with the same prefix, agent harness,
-and model, use the suffix `1`.
+with the same prefix, agent harness, and model, plus 1. Name the harness and the
+model the way the existing demo folders do, so Claude Code running Opus 5 gives
+`claude-code` and `opus-5`. For example, if the most recent matching demo is
+`java-demo-claude-code-opus-5-1`, the new folder is
+`java-demo-claude-code-opus-5-2`. If no demo exists with the same prefix, agent
+harness, and model, use the suffix `1`.
 
 ## Database
 

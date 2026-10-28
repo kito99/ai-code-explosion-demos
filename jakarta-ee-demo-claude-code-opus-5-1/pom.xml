@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>guess-the-number</artifactId>
+    <artifactId>jakarta-ee-demo-claude-code-opus-5-1</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
     <name>Guess the Number with Duke</name>
@@ -87,7 +87,7 @@
     </dependencies>
 
     <build>
-        <finalName>guess-the-number</finalName>
+        <finalName>jakarta-ee-demo-claude-code-opus-5-1</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

@@ -26,16 +26,16 @@ cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/main pom.xml
 ```
 
 ```
-github.com/AlDanial/cloc v 2.06  T=0.02 s (940.4 files/s, 44097.9 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.02 s (774.6 files/s, 36732.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            14             87             68            446
+Java                            14             88             72            452
 Maven                            1              8             18            161
-XML                              3             11              3             73
+XML                              3             11              3             72
 Properties                       1              2              9              5
 -------------------------------------------------------------------------------
-SUM:                            19            108             98            685
+SUM:                            19            109            102            690
 -------------------------------------------------------------------------------
 ```
 
@@ -46,7 +46,7 @@ cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/test
 ```
 
 ```
-github.com/AlDanial/cloc v 2.06  T=0.01 s (283.2 files/s, 35051.7 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.02 s (256.2 files/s, 31708.1 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------

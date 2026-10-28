@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:18
-    container_name: duke-guess-db
+    container_name: java-demo-claude-code-opus-5-1-db
     environment:
       POSTGRES_DB: dukedb
       POSTGRES_USER: duke

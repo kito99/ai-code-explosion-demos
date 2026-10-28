@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>duke-guess</artifactId>
+    <artifactId>java-demo-claude-code-opus-5-1</artifactId>
     <version>1.0.0</version>
-    <name>duke-guess</name>
+    <name>java-demo-claude-code-opus-5-1</name>
     <description>Guess the Number with Duke</description>
 
     <properties>

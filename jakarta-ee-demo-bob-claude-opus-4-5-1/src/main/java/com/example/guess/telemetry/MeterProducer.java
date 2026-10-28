@@ -23,6 +23,6 @@ public class MeterProducer {
     @Produces
     @ApplicationScoped
     public Meter produceMeter() {
-        return openTelemetry.getMeter("guess-the-number");
+        return openTelemetry.getMeter("jakarta-ee-demo-bob-claude-opus-4-5-1");
     }
 }

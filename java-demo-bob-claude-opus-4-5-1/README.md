@@ -136,7 +136,7 @@ mvn spring-boot:run
 Or run the packaged jar:
 
 ```bash
-java --enable-preview -jar target/duke-guess-1.0.0.jar
+java --enable-preview -jar target/java-demo-bob-claude-opus-4-5-1-1.0.0.jar
 ```
 
 ---

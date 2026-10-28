@@ -14,6 +14,10 @@ coding conventions every demo follows.
 Reading the names of the existing demo folders is fine and necessary to work
 out this demo's own name below.
 
+Leave `DEMOS.md` unread until the app is finished. It summarizes the stacks and
+APIs the other demos chose, so reading it early would steer your decisions. You
+append to it at the end, once your own choices are made.
+
 ## Project name
 
 The name of the project should be `[prefix]-demo-[agent harness]-[model]_xx`,
@@ -36,6 +40,15 @@ legal package; `com.example` and a short app-specific segment is fine there.
 
 The test suite must run on a clean machine with nothing started by hand, so
 tests provision whatever they need themselves.
+
+## Demo index
+
+Now that the app is built, read `DEMOS.md` in the repository root and add a
+row for this demo, matching the existing column order and the table's
+alignment. Link the folder name, name the stack you chose, and name the
+persistence API and the datastore behind it, or write an em dash where the
+demo has no such feature. Describe what you actually built rather than what
+the requirements ask for.
 
 ## Files to copy
 

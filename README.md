@@ -10,6 +10,7 @@ models and the results compared side by side.
 | File                    | Description                                                                        |
 |-------------------------|------------------------------------------------------------------------------------|
 | `BRD.md`                | The requirements every demo is built from.                                         |
+| `DEMOS.md`              | An index of every generated demo and what each one uses.                           |
 | `java-prompt.txt`       | Build the app using Java with no specified stack.                                  |
 | `jakarta-ee-prompt.txt` | Build the app using Java with Jakarta EE and MicroProfile running on Open Liberty. |
 | `demo-prompt-common.md` | The instructions every prompt shares.                                              |
@@ -18,10 +19,10 @@ models and the results compared side by side.
 | `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                                |
 | `.skills/`              | The Context7 skill. Both harnesses symlink to it.                                  |
 
-Each prompt specifies only the the stack to build, the project name prefix to
-use, and a pointer to `demo-prompt-common.md` for everything else. That keeps the
-shared rules in one place, so a change to the naming scheme or to what the
-README must record lands in every prompt at once.
+Each prompt names the stack to build if it mandates one, the project name
+prefix to use, and a pointer to `demo-prompt-common.md` for everything else.
+That keeps the shared rules in one place, so a change to the naming scheme or
+to what the README must record lands in every prompt at once.
 
 ## Prerequisites
 
@@ -47,19 +48,23 @@ Verify that installation was successful prior to running a prompt:
 cloc --version
 ```
 
-Docker and Compose are also required, because the generated apps run PostgreSQL
-as a container:
+Docker and Compose are needed for any demo that runs its datastore in a
+container, which is most of the existing ones. The requirements no longer
+mandate a database, so a newer demo may need nothing beyond a JDK. Check
+[`DEMOS.md`](DEMOS.md) or the app's own README for what it uses.
 
 ```bash
 docker compose version
 ```
 
-Building and running a generated app requires a JDK and Maven. Which JDK depends on
-what the agent chose, so check the app's own README. (AGENTS.md specifies at least JDK 25.)
+Building and running a generated app requires a JDK and Maven. Which JDK
+depends on what the agent chose, so check the app's own README. (AGENTS.md
+specifies at least JDK 25.)
 
 A Context7 API key is required, because `.mcp.json` reads it from the
-environment. Create one at [context7.com/dashboard](https://context7.com/dashboard)
-and export it before starting your agent:
+environment. Create one at
+[context7.com/dashboard](https://context7.com/dashboard) and export it before
+starting your agent:
 
 ```bash
 export CONTEXT7_API_KEY=your-key-here
@@ -72,10 +77,10 @@ only read from the environment, so it never lands in a committed file.
 
 `.mcp.json` registers [Context7](https://context7.com) as this repository's MCP
 server, and `.skills/context7-mcp` tells the agent when to use it. The
-point is that a generated app follows the current Open Liberty, Jakarta EE,
-MicroProfile, and PostgreSQL documentation rather than whatever the model
-remembers, which matters most for the specification APIs the prompts ask agents
-to favor.
+point is that a generated app follows current documentation for whatever
+libraries it picks rather than whatever the model remembers. That matters most
+for the Jakarta EE and MicroProfile APIs `jakarta-ee-prompt.txt` asks agents to
+favor.
 
 Skills are standardized, so the one copy lives in `.skills` and each harness's
 own skills directory symlinks to it: both `.claude/skills` and `.bob/skills`
@@ -101,9 +106,9 @@ want. For example:
 Run the prompt java-prompt.txt
 ```
 
-Nothing needs to be set up first. The agent reads the prompt, follows it into
-`demo-prompt-common.md`, works out the project name, and builds the app in a new
-directory of its own.
+Beyond the prerequisites above, there is nothing to set up per demo. The agent
+reads the prompt, follows it into `demo-prompt-common.md`, works out the project
+name, and builds the app in a new directory of its own.
 
 Run it from the root, not from inside a demo directory. The prompts resolve
 `BRD.md` and `demo-prompt-common.md` as siblings, and the next project name is
@@ -113,14 +118,16 @@ worked out by looking at the demo directories already here.
 
 Each app lives in a directory named
 `[prefix]-demo-[agent harness]-[model]_xx`, where the prefix is the one the
-prompt hands the agent. So `java-demo-claude-code-opus-5_1` is the first plain
-Java demo built by Claude Code using Claude Opus 5. The suffix counts up per
-combination of prefix, harness, and model.
+prompt hands the agent. So `java-demo-claude-code-opus-5_1` is the first demo
+built from `java-prompt.txt` by Claude Code using Claude Opus 5. The suffix
+counts up per combination of prefix, harness, and model.
 
-Every directory carries copies of `BRD.md` and the prompt files it was built
-from, so each app records the exact requirements and instructions that produced
-it even after those files change here. Its own `README.md` has the build and run
-commands, along with the date, harness, model, and line counts.
+Every directory carries copies of `BRD.md`, `AGENTS.md`, and the prompt files
+it was built from, so each app records the exact requirements and instructions
+that produced it even after those files change here. Its own `README.md` has
+the build and run commands, along with the date, harness, model, and line
+counts.
 
-Each app brings its own `compose.yaml` for PostgreSQL, so check that app's
-README for its ports before running two demos at once.
+[`DEMOS.md`](DEMOS.md) indexes every demo with the stack, persistence API,
+and features it ended up using. Each prompt tells the agent to add its own row
+once the app is built.

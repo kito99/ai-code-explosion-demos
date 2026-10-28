@@ -11,7 +11,7 @@ their configuration nor their READMEs, so each demo shows what this harness and
 model produce on their own. `AGENTS.md` is the exception, since it carries the
 coding conventions every demo follows.
 
-Reading the names of the existing demo folders is fine, and necessary, to work
+Reading the names of the existing demo folders is fine and necessary to work
 out this demo's own name below.
 
 ## Project name
@@ -32,7 +32,7 @@ artifact id as well: the packaged jar or WAR name, any server configuration
 that has to reference that file by name, container names in `compose.yaml`,
 and the OpenTelemetry service name. Leave Java package names out of this,
 since a folder name containing hyphens and a digit is not a legal package;
-`com.example` and a short app-specific segment are fine there.
+`com.example` and a short app-specific segment is fine there.
 
 ## Database
 
@@ -85,7 +85,7 @@ In the `README.md` file, record the following:
   This MUST be generated using cloc. Leave front-end code (HTML, CSS,
   JavaScript) and assets such as SVG images out of both counts. Record the
   commands used and their output tables so the numbers can be reproduced.
-  Adjust the paths below to the project's own layout, but keep the language
+  Adjust the paths below to the project's own layout but keep the language
   exclusions so counts stay comparable across demos:
 
       cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/main pom.xml
@@ -94,7 +94,7 @@ In the `README.md` file, record the following:
 Also record:
 
 * How to start and stop the supporting services
-* The ports the app and the database listen on
+* The ports the app and the database listen to on
 * The database name, user, and password the app defaults to
 * How the schema gets created
 * The URLs for the OpenAPI documentation and the leaderboard screen

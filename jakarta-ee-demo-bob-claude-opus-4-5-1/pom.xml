@@ -118,7 +118,8 @@
                     <serverName>guessTheNumber</serverName>
                     <copyDependencies>
                         <dependencyGroup>
-                            <location>${server.config.dir}/lib/postgres</location>
+                            <!-- Resolved at build time to the server config dir inside the Liberty install -->
+                            <location>${project.build.directory}/liberty/wlp/usr/servers/guessTheNumber/lib/postgres</location>
                             <dependency>
                                 <groupId>org.postgresql</groupId>
                                 <artifactId>postgresql</artifactId>

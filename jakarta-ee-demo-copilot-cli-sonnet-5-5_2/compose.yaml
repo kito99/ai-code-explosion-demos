@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:18.6
+    container_name: jakarta-ee-demo-copilot-cli-sonnet-5-5_2-db
+    environment:
+      POSTGRES_DB: duke
+      POSTGRES_USER: duke
+      POSTGRES_PASSWORD: duke
+    ports:
+      - "5435:5432"
+    volumes:
+      - duke-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U duke -d duke"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  duke-data:

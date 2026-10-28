@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard – Guess the Number with Duke</title>
+    <style>
+        :root {
+            --blue:  #1565c0;
+            --green: #2e7d32;
+            --bg:    #f0f4f8;
+            --card:  #ffffff;
+            --text:  #1a1a2e;
+            --muted: #555577;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 { font-size: 1.6rem; color: var(--blue); }
+
+        header nav a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        header nav a:hover { text-decoration: underline; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 640px;
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: var(--muted);
+            font-size: 1.05rem;
+            padding: 2rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 0.6rem 0.8rem;
+            color: var(--muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        tbody tr:nth-child(even) { background: #f9f9fc; }
+
+        tbody td {
+            padding: 0.75rem 0.8rem;
+            font-size: 1rem;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .rank-1 { font-weight: 700; color: #b8860b; }
+        .rank-2 { font-weight: 700; color: #888888; }
+        .rank-3 { font-weight: 700; color: #a0522d; }
+
+        .guesses-cell { text-align: center; }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: 2px solid var(--blue);
+            background: transparent;
+            color: var(--blue);
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.15s;
+        }
+
+        .btn:hover { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🏆 Leaderboard</h1>
+    <nav><a href="/">🎯 Play Game</a></nav>
+</header>
+
+<div class="card">
+    <h2>Top 10 Results</h2>
+
+    <!-- Empty state -->
+    <p class="empty-msg"
+       th:if="${#lists.isEmpty(entries)}">
+        No scores have been posted yet. Be the first to win!
+    </p>
+
+    <!-- Leaderboard table -->
+    <table th:if="${!#lists.isEmpty(entries)}" aria-label="Leaderboard">
+        <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Player</th>
+                <th scope="col" style="text-align:center">Guesses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry, iter : ${entries}">
+                <td th:class="${iter.index == 0} ? 'rank-1' : (${iter.index == 1} ? 'rank-2' : (${iter.index == 2} ? 'rank-3' : ''))"
+                    th:text="${iter.count}">1</td>
+                <td th:text="${entry.playerName}">Alice</td>
+                <td class="guesses-cell" th:text="${entry.guessCount}">3</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="btn-row">
+        <a href="/" class="btn">Play Again</a>
+    </div>
+</div>
+
+</body>
+</html>

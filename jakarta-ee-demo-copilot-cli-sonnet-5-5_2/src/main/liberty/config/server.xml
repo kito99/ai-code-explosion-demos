@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+  <featureManager>
+    <feature>jakartaee-11.0</feature>
+    <feature>microProfile-7.1</feature>
+  </featureManager>
+
+  <!-- Each variable can be overridden by the environment variable of the same name in upper snake case (e.g. DB_URL). -->
+  <variable name="http.port" defaultValue="9080"/>
+  <variable name="db.url" defaultValue="jdbc:postgresql://localhost:5435/duke"/>
+  <variable name="db.user" defaultValue="duke"/>
+  <variable name="db.password" defaultValue="duke"/>
+
+  <httpEndpoint id="defaultHttpEndpoint" host="*" httpPort="${http.port}" httpsPort="-1"/>
+
+  <library id="postgresql">
+    <fileset dir="${shared.resource.dir}/jdbc" includes="postgresql-*.jar"/>
+  </library>
+
+  <dataSource id="DukeDataSource" jndiName="jdbc/duke">
+    <jdbcDriver libraryRef="postgresql"/>
+    <properties.postgresql url="${db.url}" user="${db.user}" password="${db.password}"/>
+  </dataSource>
+
+  <!-- Jakarta Data creates the leaderboard table on first use when it is missing. -->
+  <databaseStore id="DukeStore" dataSourceRef="DukeDataSource" createTables="true"/>
+
+  <webApplication id="duke" location="${app.war}" contextRoot="/"/>
+</server>

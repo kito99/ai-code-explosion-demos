@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard – Guess the Number with Duke</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <h1>Leaderboard</h1>
+  <nav><a href="index.html">Back to the game</a></nav>
+  <section class="card">
+    <p id="empty" hidden>No scores have been posted so far. Win a game and be the first!</p>
+    <table id="table" hidden>
+      <caption class="sr" style="text-align:left;font-weight:600;padding-bottom:.5rem">Top 10 results, fewest guesses first</caption>
+      <thead><tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">Guesses</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p id="error" hidden>Sorry, the leaderboard couldn't be loaded. Please reload the page to try again.</p>
+  </section>
+</main>
+<script>
+(async () => {
+  try {
+    const res = await fetch('/api/leaderboard');
+    if (!res.ok) throw new Error();
+    const entries = await res.json();
+    if (entries.length === 0) { document.getElementById('empty').hidden = false; return; }
+    const rows = document.getElementById('rows');
+    for (const e of entries) {
+      const tr = document.createElement('tr');
+      for (const v of [e.rank, e.name, e.guesses]) {
+        const td = document.createElement('td');
+        td.textContent = v;
+        tr.appendChild(td);
+      }
+      rows.appendChild(tr);
+    }
+    document.getElementById('table').hidden = false;
+  } catch (_) {
+    document.getElementById('error').hidden = false;
+  }
+})();
+</script>
+</body>
+</html>

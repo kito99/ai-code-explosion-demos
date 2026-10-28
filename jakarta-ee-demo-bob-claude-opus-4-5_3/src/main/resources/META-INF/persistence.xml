@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence
+                 https://jakarta.ee/xml/ns/persistence/persistence_3_2.xsd"
+             version="3.2">
+
+    <persistence-unit name="guessPU" transaction-type="JTA">
+        <class>com.example.guess.entity.LeaderboardEntry</class>
+        <!--
+            ddl-generation=create-tables: create schema if not present (satisfies NFR-8).
+            This runs on every startup; existing tables are left intact.
+        -->
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="jakarta.persistence.schema-generation.create-source"   value="metadata"/>
+        </properties>
+    </persistence-unit>
+
+</persistence>

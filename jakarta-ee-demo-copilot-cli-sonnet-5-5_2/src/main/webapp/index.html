@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Number with Duke</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main>
+    <h1>Guess the Number with Duke</h1>
+    <nav><a href="leaderboard.html">View the leaderboard</a></nav>
+
+    <div class="duke-stage">
+      <img id="duke" class="duke" src="images/Thinking.svg" alt="Duke, thinking of a number">
+    </div>
+
+    <p class="intro">Duke is thinking of a number from 1 to 10. You have 5 guesses. Can you find it?</p>
+
+    <p id="counts" class="counts" aria-live="polite"></p>
+
+    <form id="guess-form" novalidate>
+      <label for="guess">Your guess (1 to 10)</label>
+      <input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off">
+      <button type="submit" id="guess-button">Guess</button>
+    </form>
+
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+
+    <form id="score-form" class="score-form" hidden novalidate>
+      <label for="name">Your name (up to 30 characters)</label>
+      <input id="name" name="name" type="text" autocomplete="off">
+      <button type="submit">Post my score</button>
+    </form>
+    <p id="score-message" class="message" role="status" aria-live="polite"></p>
+
+    <button type="button" id="new-game">New game</button>
+  </main>
+  <script src="js/game.js"></script>
+</body>
+</html>

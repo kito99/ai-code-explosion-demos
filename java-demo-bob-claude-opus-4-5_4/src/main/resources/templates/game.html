@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number with Duke</title>
+    <style>
+        :root {
+            --blue:   #1565c0;
+            --green:  #2e7d32;
+            --red:    #c62828;
+            --orange: #e65100;
+            --bg:     #f0f4f8;
+            --card:   #ffffff;
+            --text:   #1a1a2e;
+            --muted:  #555577;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 640px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            color: var(--blue);
+        }
+
+        header nav a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        header nav a:hover { text-decoration: underline; }
+
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 640px;
+        }
+
+        /* Duke area */
+        .duke-area {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        #duke-img {
+            height: 180px;
+            object-fit: contain;
+            transition: transform 0.15s;
+        }
+
+        /* Jump animation */
+        @keyframes jump {
+            0%   { transform: translateY(0); }
+            30%  { transform: translateY(-40px); }
+            60%  { transform: translateY(0); }
+            75%  { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+
+        #duke-img.celebrating {
+            animation: jump 0.75s ease-in-out 2;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Stats bar */
+        .stats {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            font-size: 0.95rem;
+            color: var(--muted);
+        }
+
+        .stats span strong { color: var(--text); }
+
+        /* Feedback / messages */
+        .message {
+            text-align: center;
+            font-size: 1.05rem;
+            min-height: 1.6em;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .message.error   { color: var(--red); }
+        .message.too-low { color: var(--orange); }
+        .message.too-high { color: var(--orange); }
+        .message.won     { color: var(--green); font-size: 1.2rem; }
+        .message.lost    { color: var(--red);   font-size: 1.05rem; }
+
+        /* Guess form */
+        .guess-form {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .guess-form input[type="number"] {
+            width: 90px;
+            padding: 0.6rem 0.75rem;
+            font-size: 1.2rem;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            -moz-appearance: textfield;
+        }
+
+        .guess-form input[type="number"]::-webkit-outer-spin-button,
+        .guess-form input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        .guess-form input[type="number"]:focus {
+            outline: none;
+            border-color: var(--blue);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.6rem 1.4rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        .btn:hover  { opacity: 0.88; transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+
+        .btn-primary { background: var(--blue);  color: #fff; }
+        .btn-success { background: var(--green); color: #fff; }
+        .btn-outline {
+            background: transparent;
+            color: var(--blue);
+            border: 2px solid var(--blue);
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 0.75rem;
+        }
+
+        /* Score entry panel */
+        .score-panel {
+            background: #e8f5e9;
+            border: 1px solid #a5d6a7;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .score-panel p { margin-bottom: 0.75rem; color: var(--green); font-weight: 600; }
+
+        .score-form {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .score-form input[type="text"] {
+            padding: 0.55rem 0.8rem;
+            font-size: 1rem;
+            border: 2px solid #a5d6a7;
+            border-radius: 8px;
+            width: 200px;
+        }
+
+        .score-form input[type="text"]:focus {
+            outline: none;
+            border-color: var(--green);
+        }
+
+        .name-error { color: var(--red); font-size: 0.9rem; margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>🎯 Guess the Number</h1>
+    <nav><a href="/leaderboard">🏆 Leaderboard</a></nav>
+</header>
+
+<div class="card">
+    <!-- Duke image -->
+    <div class="duke-area">
+        <img id="duke-img"
+             th:src="@{/images/duke-stand.png}"
+             th:data-stand="@{/images/duke-stand.png}"
+             th:data-wave1="@{/images/duke-wave1.png}"
+             th:data-wave2="@{/images/duke-wave2.png}"
+             alt="Duke, the Java mascot"
+             width="180" height="180">
+        <p class="subtitle">I'm thinking of a number between 1 and 10…</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats">
+        <span>Guesses made: <strong th:text="${guessCount}">0</strong></span>
+        <span>Remaining: <strong th:text="${guessesRemaining}">5</strong></span>
+    </div>
+
+    <!-- Feedback / validation message -->
+    <div class="message"
+         th:classappend="${messageClass}"
+         th:text="${displayMessage}">
+        Make your first guess!
+    </div>
+
+    <!-- ACTIVE: guess form -->
+    <div th:if="${status == 'ACTIVE'}">
+        <form class="guess-form" method="post" action="/guess" id="guessForm">
+            <label for="guessInput" class="sr-only">Your guess</label>
+            <input type="number" id="guessInput" name="guess"
+                   min="1" max="10" placeholder="1–10"
+                   aria-label="Enter your guess (1 to 10)"
+                   autofocus required>
+            <button type="submit" class="btn btn-primary">Guess</button>
+        </form>
+        <div class="btn-row">
+            <form method="post" action="/new-game">
+                <button type="submit" class="btn btn-outline">New Game</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- WON -->
+    <div th:if="${status == 'WON'}">
+        <!-- Score entry panel -->
+        <div class="score-panel" th:if="${nameError != null or true}">
+            <p>🎉 Post your score to the leaderboard!</p>
+            <form class="score-form" method="post" action="/submit-score">
+                <input type="text" name="playerName" maxlength="30"
+                       placeholder="Your name" aria-label="Your name"
+                       autofocus>
+                <button type="submit" class="btn btn-success">Post Score</button>
+            </form>
+            <p class="name-error" th:if="${nameError != null}" th:text="${nameError}"></p>
+        </div>
+        <div class="btn-row">
+            <form method="post" action="/new-game">
+                <button type="submit" class="btn btn-outline">Play Again</button>
+            </form>
+            <a href="/leaderboard" class="btn btn-outline">View Leaderboard</a>
+        </div>
+    </div>
+
+    <!-- LOST -->
+    <div th:if="${status == 'LOST'}">
+        <div class="btn-row">
+            <form method="post" action="/new-game">
+                <button type="submit" class="btn btn-primary">Play Again</button>
+            </form>
+            <a href="/leaderboard" class="btn btn-outline">View Leaderboard</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Celebration animation on win
+    const img = document.getElementById('duke-img');
+    const status = /*[[${status}]]*/ 'ACTIVE';
+
+    const standSrc = img.dataset.stand;
+    const wave1Src = img.dataset.wave1;
+    const wave2Src = img.dataset.wave2;
+
+    if (status === 'WON') {
+        // Alternate wave images while the CSS jump plays
+        img.classList.add('celebrating');
+        let tick = 0;
+        const frames = [wave1Src, wave2Src, wave1Src, wave2Src, standSrc];
+        const interval = setInterval(() => {
+            if (tick < frames.length) {
+                img.src = frames[tick++];
+            } else {
+                clearInterval(interval);
+            }
+        }, 300);
+
+        img.addEventListener('animationend', () => {
+            img.classList.remove('celebrating');
+            img.src = standSrc;
+        }, { once: true });
+    }
+
+    // Auto-focus guess input when page is active
+    const guessInput = document.getElementById('guessInput');
+    if (guessInput) {
+        guessInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('guessForm').submit();
+            }
+        });
+    }
+</script>
+</body>
+</html>

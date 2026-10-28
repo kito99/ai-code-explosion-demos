@@ -35,7 +35,7 @@ theme of the presentation.
 - A limited number of guesses per game, with a lose state when they run out.
 - The ability to start a new game at any time.
 - A name entered by the player when they win, so their score can be posted.
-- A leaderboard of winning results that outlives the app process.
+- A leaderboard of winning results.
 - A screen that displays the leaderboard.
 
 ### 4.2 Out of Scope
@@ -116,9 +116,9 @@ theme of the presentation.
   visible character after surrounding whitespace is trimmed and is no longer than
   30 characters. If it is not acceptable, the system shows a friendly message and
   records nothing until a valid name is entered.
-- **FR-15 — Recording a result.** A posted result stores the name, the number of
-  accepted guesses the win took, and when it happened. Each winning game creates
-  its own entry; nothing is overwritten.
+- **FR-15 — Recording a result.** A posted result records the name, the number
+  of accepted guesses the win took, and when it happened. Each winning game
+  creates its own entry; nothing is overwritten.
 - **FR-16 — No entry for a loss.** A game that ends in the lose state (see
   FR-11) records nothing, because there is no winning guess count.
 - **FR-17 — Leaderboard screen.** A separate screen lists the best results,
@@ -148,17 +148,14 @@ theme of the presentation.
   player what just happened and what they can do next.
 - **NFR-5 - Duke Images.** The game includes the official Duke image to 
   represent the character (repository: https://github.com/openjdk/duke).
-- **NFR-8 — Durable storage.** Leaderboard entries are kept in a database and
-  survive a restart of the app. Consistent with NFR-1, no specific database
-  product or data access technology is mandated by this document.
 
 ## 8. Assumptions
 
 - The player is on a single device and plays one game at a time.
-- An in-progress game does not persist; refreshing the page starts a new game.
-  Leaderboard entries do persist (see NFR-8).
-- The app runs as a single instance against one database, so every player shares
-  the same leaderboard.
+- An in-progress game is not carried over; refreshing the page starts a new
+  game.
+- The app runs as a single instance, so every player shares the same
+  leaderboard.
 - A suitable Duke image or graphic is available to display.
 
 ## 9. Success Criteria
@@ -174,6 +171,5 @@ theme of the presentation.
   and the right number of guesses, while losing adds nothing.
 - The leaderboard orders entries by fewest guesses, breaks ties by which was
   recorded first, and shows no more than 10.
-- Leaderboard entries are still there after the app restarts.
 - With nothing recorded, the leaderboard screen explains that no scores have
   been posted yet.

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+    <featureManager>
+        <feature>jakartaee-11.0</feature>
+        <feature>microProfile-7.1</feature>
+        <feature>data-1.0</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  host="*"
+                  httpPort="${http.port}"
+                  httpsPort="${https.port}"/>
+
+    <!-- The leaderboard lives in an in-memory Derby database, so a server restart clears it. -->
+    <library id="derbyLib">
+        <fileset dir="${server.config.dir}/lib/derby" includes="*.jar"/>
+    </library>
+
+    <dataSource id="DefaultDataSource">
+        <jdbcDriver libraryRef="derbyLib"/>
+        <properties.derby.embedded databaseName="memory:dukeLeaderboard" createDatabase="create"/>
+    </dataSource>
+
+    <webApplication contextRoot="/" location="jakarta-ee-demo-claude-code-opus-5_3.war"/>
+
+    <mpMetrics authentication="false"/>
+
+    <logging consoleLogLevel="INFO"/>
+</server>

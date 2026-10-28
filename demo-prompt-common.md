@@ -28,28 +28,14 @@ harness, and model, use the suffix `1`.
 
 Use that same folder name as the build artifact id, so the output of a build
 says which demo produced it. Carry it through everything derived from the
-artifact id as well: the packaged jar or WAR name, any server configuration
-that has to reference that file by name, and container names in `compose.yaml`.
-Leave Java package names out of this, since a folder name containing hyphens
-and a digit is not a legal package; `com.example` and a short app-specific
-segment is fine there.
-
-## Database
-
-Use PostgreSQL 18 from the official Docker image. Pin the version rather than
-tracking the latest, so demos built months apart stay comparable.
-
-Commit a `compose.yaml` in the project folder so the database starts with a
-single `docker compose up -d`. Give the database name, user, and password the
-values the app already defaults to, so a fresh clone runs with no setup.
-
-A fresh database must end up with the right tables without a manual step, and
-the README must say how the schema gets created.
+artifact id as well, such as the name of the packaged file. Leave Java package
+names out of this, since a folder name containing hyphens and a digit is not a
+legal package; `com.example` and a short app-specific segment is fine there.
 
 ## Tests
 
-The test suite must run on a clean machine without anyone starting a database by
-hand, so tests provision their own. Use Testcontainers or an equivalent library.
+The test suite must run on a clean machine with nothing started by hand, so
+tests provision whatever they need themselves.
 
 ## Files to copy
 
@@ -85,10 +71,8 @@ In the `README.md` file, record the following:
 
 Also record:
 
-* How to start and stop the supporting services
-* The ports the app and the database listen on
-* The database name, user, and password the app defaults to
-* How the schema gets created
+* The ports the app listens on
+* Anything else that has to be running, and how to start and stop it
 * The URL for the leaderboard screen
 * How to clear the leaderboard between runs, since the app itself has no way to
   delete entries

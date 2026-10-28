@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard – Guess the Number with Duke</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+            padding: 1rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 520px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f0ad00;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #a0a8c0;
+            margin-bottom: 1.75rem;
+        }
+
+        /* Duke on leaderboard */
+        .duke-small {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+        }
+
+        /* Empty state */
+        .empty-state {
+            color: #a0a8c0;
+            font-size: 1rem;
+            padding: 1.5rem 0;
+        }
+
+        /* Leaderboard table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        thead th {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #a0a8c0;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+        }
+
+        thead th.center { text-align: center; }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.04);
+        }
+
+        tbody td {
+            padding: 0.65rem 0.75rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        tbody td.center { text-align: center; }
+
+        /* Rank medal styling */
+        .rank-1 { color: #ffd700; font-weight: 700; font-size: 1.1rem; }
+        .rank-2 { color: #c0c0c0; font-weight: 700; }
+        .rank-3 { color: #cd7f32; font-weight: 700; }
+
+        .guesses-badge {
+            display: inline-block;
+            background: rgba(240,173,0,0.15);
+            border: 1px solid rgba(240,173,0,0.35);
+            border-radius: 1rem;
+            padding: 0.2rem 0.7rem;
+            color: #f0ad00;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Nav */
+        .btn-secondary {
+            display: inline-block;
+            padding: 0.7rem 1.4rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            color: #e0e0e0;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+
+        .btn-secondary:hover { opacity: 0.85; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <img th:src="@{/images/duke-thumbsup.svg}" alt="Duke giving a thumbs up" class="duke-small" />
+    <h1>🏆 Leaderboard</h1>
+    <p class="subtitle">Top 10 fastest wins — fewest guesses wins!</p>
+
+    <!-- Empty state -->
+    <p th:if="${empty}" class="empty-state">No scores have been posted yet. Be the first to win!</p>
+
+    <!-- Scores table -->
+    <table th:if="${!empty}" aria-label="Leaderboard">
+        <thead>
+            <tr>
+                <th class="center">Rank</th>
+                <th>Player</th>
+                <th class="center">Guesses</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry, stat : ${entries}">
+                <td class="center">
+                    <span th:if="${stat.index == 0}" class="rank-1">🥇</span>
+                    <span th:if="${stat.index == 1}" class="rank-2">🥈</span>
+                    <span th:if="${stat.index == 2}" class="rank-3">🥉</span>
+                    <span th:if="${stat.index >= 3}" th:text="${stat.count}">4</span>
+                </td>
+                <td th:text="${entry.playerName()}">Player</td>
+                <td class="center">
+                    <span class="guesses-badge" th:text="${entry.guessCount()}">3</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/" class="btn-secondary">🎮 Play Again</a>
+</div>
+</body>
+</html>

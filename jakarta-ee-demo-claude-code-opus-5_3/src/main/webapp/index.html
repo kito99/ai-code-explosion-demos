@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="icon" href="images/duke-thinking.svg" type="image/svg+xml">
+</head>
+<body>
+<main class="card">
+    <header class="card-header">
+        <h1>Guess the Number with Duke</h1>
+        <p class="subtitle">Duke is thinking of a number from 1 to 10. You get 5 guesses.</p>
+    </header>
+
+    <div class="stage">
+        <figure class="duke" id="duke">
+            <img id="duke-image" src="images/duke-thinking.svg" alt="Duke, thinking of a number">
+        </figure>
+
+        <section class="play" aria-labelledby="status-heading">
+            <h2 id="status-heading" class="visually-hidden">Game status</h2>
+
+            <p class="message" id="message" role="status" aria-live="polite">Starting a new game&hellip;</p>
+
+            <p class="counts" id="counts">
+                <span>Guesses made: <strong id="guesses-made">0</strong></span>
+                <span>Guesses left: <strong id="guesses-remaining">5</strong></span>
+            </p>
+
+            <form id="guess-form" class="guess-form" autocomplete="off">
+                <label for="guess">Your guess (1&ndash;10)</label>
+                <div class="row">
+                    <input id="guess" name="guess" type="text" inputmode="numeric" maxlength="3"
+                           aria-describedby="message" required>
+                    <button type="submit" id="guess-button">Guess</button>
+                </div>
+            </form>
+
+            <form id="score-form" class="score-form" hidden autocomplete="off">
+                <label for="player-name">Post your score as</label>
+                <div class="row">
+                    <input id="player-name" name="playerName" type="text" maxlength="30"
+                           placeholder="Your name" aria-describedby="message">
+                    <button type="submit" id="post-button">Post score</button>
+                </div>
+            </form>
+
+            <div class="actions">
+                <button type="button" id="new-game-button">New game</button>
+                <a class="link-button" href="leaderboard.html">Leaderboard</a>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script src="js/game.js"></script>
+</body>
+</html>

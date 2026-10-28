@@ -63,7 +63,6 @@ SUM:                             4             52             43            279
 - **Jakarta Persistence 3.2** — entity mapping, schema auto-creation
 - **Jakarta REST 4.0** — REST API at `/api/game/*` and `/api/leaderboard`
 - **Jakarta Validation 3.1** — request validation (Bean Validation)
-- **PostgreSQL 18** (Docker, pinned image `postgres:18`)
 
 ## Ports
 

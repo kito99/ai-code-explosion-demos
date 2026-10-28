@@ -1,72 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Guess the Number with Duke</title>
-  <link rel="stylesheet" href="style.css"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Guess the Number with Duke</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --java-red:    #e76f51;
+            --java-dark:   #264653;
+            --java-mid:    #457b9d;
+            --java-light:  #a8dadc;
+            --java-pale:   #f1faee;
+            --text-dark:   #1d3557;
+            --success:     #2a9d8f;
+            --danger:      #e63946;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: var(--java-dark);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1rem;
+        }
+
+        header {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        header h1 {
+            color: var(--java-pale);
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .nav-link {
+            background: none;
+            border: 2px solid var(--java-light);
+            color: var(--java-light);
+            border-radius: 6px;
+            padding: 0.4rem 0.9rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .nav-link:hover { background: rgba(168,218,220,0.15); }
+
+        main {
+            background: var(--java-pale);
+            border-radius: 16px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+        }
+
+        /* ---- Duke area ---- */
+        .duke-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .duke-area img {
+            height: 160px;
+            width: auto;
+        }
+
+        @keyframes duke-jump {
+            0%   { transform: translateY(0)  rotate(0deg); }
+            20%  { transform: translateY(-30px) rotate(-5deg); }
+            40%  { transform: translateY(0)  rotate(0deg); }
+            55%  { transform: translateY(-20px) rotate(4deg); }
+            70%  { transform: translateY(0)  rotate(0deg); }
+            82%  { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(0)  rotate(0deg); }
+        }
+
+        .duke-area img.celebrating {
+            animation: duke-jump 1.5s ease-in-out 1 forwards;
+        }
+
+        .duke-speech {
+            background: #fff;
+            border: 2px solid var(--java-light);
+            border-radius: 12px;
+            padding: 0.7rem 1.2rem;
+            margin-top: 0.75rem;
+            font-size: 1rem;
+            text-align: center;
+            max-width: 420px;
+        }
+
+        /* ---- Guess counts ---- */
+        .stats {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-box {
+            background: var(--java-mid);
+            color: #fff;
+            border-radius: 10px;
+            padding: 0.6rem 1.4rem;
+            text-align: center;
+            min-width: 110px;
+        }
+
+        .stat-box .num {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .stat-box .label {
+            font-size: 0.75rem;
+            opacity: 0.85;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* ---- Guess form ---- */
+        .guess-form {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .guess-form input[type="number"] {
+            width: 90px;
+            padding: 0.7rem;
+            border: 2px solid var(--java-mid);
+            border-radius: 8px;
+            font-size: 1.2rem;
+            text-align: center;
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+
+        .guess-form input::-webkit-outer-spin-button,
+        .guess-form input::-webkit-inner-spin-button { -webkit-appearance: none; }
+
+        .btn {
+            padding: 0.7rem 1.6rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        .btn:active { transform: scale(0.97); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-primary { background: var(--java-red); color: #fff; }
+        .btn-secondary { background: var(--java-mid); color: #fff; }
+        .btn-success { background: var(--success); color: #fff; }
+
+        /* ---- Messages ---- */
+        .message {
+            text-align: center;
+            margin: 0.75rem 0;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            min-height: 2.5rem;
+        }
+
+        .message.info     { background: #d6eaf8; color: #1a5276; }
+        .message.success  { background: #d5f5e3; color: #1e8449; }
+        .message.warning  { background: #fef9e7; color: #7d6608; }
+        .message.error    { background: #fceae9; color: #a93226; }
+        .message:empty    { display: none; }
+
+        /* ---- Win form (name capture) ---- */
+        .win-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .win-form input[type="text"] {
+            width: 260px;
+            padding: 0.65rem;
+            border: 2px solid var(--success);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .win-form .btn-row {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* ---- Play-again area ---- */
+        .play-again-area {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* ---- Leaderboard page ---- */
+        .leaderboard-header {
+            text-align: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .leaderboard-header h2 {
+            font-size: 1.6rem;
+            color: var(--java-dark);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 0.7rem 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: var(--java-mid);
+            color: #fff;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) td { background: #e8f4f8; }
+
+        .empty-note {
+            text-align: center;
+            color: #666;
+            padding: 2rem;
+            font-size: 1rem;
+        }
+
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Guess the Number with Duke</h1>
-    <nav>
-      <a href="index.html" class="nav-link active">Game</a>
-      <a href="leaderboard.html" class="nav-link">Leaderboard</a>
-    </nav>
-  </header>
 
-  <main>
-    <section class="duke-section" aria-label="Duke character">
-      <img id="duke-img"
-           src="images/duke-thinking.svg"
-           alt="Duke is thinking of a number"
-           class="duke-image"/>
-    </section>
+<header>
+    <h1>🎮 Guess the Number with Duke</h1>
+    <button class="nav-link" id="nav-leaderboard" onclick="showLeaderboard()">🏆 Leaderboard</button>
+</header>
 
-    <section class="game-section">
-      <p id="status-message" class="status-message" aria-live="polite">
-        Duke is thinking of a number between 1 and 10. Can you guess it?
-      </p>
+<main id="main-content">
 
-      <div id="score-info" class="score-info" aria-live="polite"></div>
+    <!-- ====== GAME PAGE ====== -->
+    <div id="page-game">
+        <div class="duke-area">
+            <img id="duke-img" src="images/duke-thinking.svg" alt="Duke the Java mascot" />
+            <div class="duke-speech" id="duke-speech">
+                I'm thinking of a number between 1 and 10. Can you guess it?
+            </div>
+        </div>
 
-      <div id="guess-form" class="guess-form">
-        <label for="guess-input" class="sr-only">Enter your guess (1–10)</label>
-        <input id="guess-input"
-               type="number"
-               min="1"
-               max="10"
-               step="1"
-               placeholder="1 – 10"
-               aria-label="Your guess"
-               autocomplete="off"/>
-        <button id="guess-btn" type="button">Guess!</button>
-      </div>
+        <div class="stats" id="stats-area">
+            <div class="stat-box">
+                <div class="num" id="guess-count">0</div>
+                <div class="label">Guesses made</div>
+            </div>
+            <div class="stat-box">
+                <div class="num" id="guesses-remaining">5</div>
+                <div class="label">Guesses left</div>
+            </div>
+        </div>
 
-      <!-- Win: name entry -->
-      <div id="win-form" class="win-form hidden">
-        <p class="win-prompt">🎉 You won! Enter your name to post your score:</p>
-        <label for="name-input" class="sr-only">Your name</label>
-        <input id="name-input"
-               type="text"
-               maxlength="30"
-               placeholder="Your name (max 30 chars)"
-               aria-label="Your name"/>
-        <button id="post-btn" type="button">Post Score</button>
-        <p id="name-error" class="error-msg hidden" aria-live="polite"></p>
-      </div>
+        <div class="message" id="feedback-message" role="status" aria-live="polite"></div>
 
-      <div id="end-actions" class="end-actions hidden">
-        <button id="new-game-btn" type="button">Play Again</button>
-      </div>
+        <!-- Guess input -->
+        <div class="guess-form" id="guess-form-area">
+            <input type="number" id="guess-input" min="1" max="10" placeholder="1–10"
+                   aria-label="Your guess" />
+            <button class="btn btn-primary" id="submit-guess" onclick="submitGuess()">Guess!</button>
+        </div>
 
-      <!-- Always-visible play-again for mid-game restart -->
-      <div class="mid-game-actions">
-        <button id="restart-btn" type="button" class="secondary">Start New Game</button>
-      </div>
-    </section>
-  </main>
+        <!-- Win: name capture -->
+        <div class="win-form hidden" id="win-form">
+            <p id="win-header">🎉 You got it! Enter your name to post your score:</p>
+            <input type="text" id="player-name" maxlength="30"
+                   placeholder="Your name (up to 30 chars)"
+                   aria-label="Your name" />
+            <div class="message error hidden" id="name-error" role="alert"></div>
+            <div class="btn-row">
+                <button class="btn btn-success" onclick="postScore()">Post Score</button>
+                <button class="btn btn-secondary" onclick="startNewGame()">Skip &amp; Play Again</button>
+            </div>
+        </div>
 
-  <script src="game.js"></script>
+        <div class="play-again-area" id="play-again-area">
+            <button class="btn btn-secondary" onclick="startNewGame()">🔄 New Game</button>
+        </div>
+    </div>
+
+    <!-- ====== LEADERBOARD PAGE ====== -->
+    <div id="page-leaderboard" class="hidden">
+        <div class="leaderboard-header">
+            <h2>🏆 Leaderboard</h2>
+            <p>Top players by fewest guesses</p>
+        </div>
+
+        <div id="leaderboard-content">
+            <p class="empty-note">Loading…</p>
+        </div>
+
+        <div style="text-align:center; margin-top:1.5rem;">
+            <button class="nav-link" onclick="showGame()">← Back to Game</button>
+        </div>
+    </div>
+
+</main>
+
+<script>
+    // ---- State ----
+    let sessionId = null;
+
+    // ---- Boot ----
+    startNewGame();
+
+    // ---- Game functions ----
+
+    async function startNewGame() {
+        try {
+            const resp = await fetch('/api/game', { method: 'POST' });
+            if (!resp.ok) throw new Error('Failed to start game');
+            const state = await resp.json();
+            sessionId = state.sessionId;
+            applyState(state, null);
+            showPage('game');
+        } catch (e) {
+            setFeedback('Could not start a game. Please refresh the page.', 'error');
+        }
+    }
+
+    async function submitGuess() {
+        const input = document.getElementById('guess-input');
+        const raw = input.value.trim();
+        const num = parseInt(raw, 10);
+
+        if (!raw || isNaN(num) || num < 1 || num > 10) {
+            setFeedback('Please enter a whole number from 1 to 10.', 'error');
+            return;
+        }
+
+        document.getElementById('submit-guess').disabled = true;
+
+        try {
+            const resp = await fetch(`/api/game/${sessionId}/guess`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ number: num })
+            });
+            const data = await resp.json();
+            if (!resp.ok) {
+                setFeedback(data.message || 'Something went wrong.', 'error');
+                document.getElementById('submit-guess').disabled = false;
+                return;
+            }
+            applyState(data, num);
+        } catch (e) {
+            setFeedback('Could not reach the server. Please try again.', 'error');
+            document.getElementById('submit-guess').disabled = false;
+        }
+    }
+
+    function applyState(state, guessedNumber) {
+        document.getElementById('guess-count').textContent = state.guessCount;
+        document.getElementById('guesses-remaining').textContent = state.guessesRemaining;
+        document.getElementById('guess-input').value = '';
+
+        const dukeSpeech = document.getElementById('duke-speech');
+        const guessForm  = document.getElementById('guess-form-area');
+        const winForm    = document.getElementById('win-form');
+        const nameError  = document.getElementById('name-error');
+        const submitBtn  = document.getElementById('submit-guess');
+
+        // Reset
+        nameError.classList.add('hidden');
+        nameError.textContent = '';
+        winForm.classList.add('hidden');
+
+        if (state.status === 'ACTIVE') {
+            guessForm.classList.remove('hidden');
+            submitBtn.disabled = false;
+            if (state.lastFeedback === 'TOO_LOW') {
+                setFeedback(`${guessedNumber} is too low. Try higher!`, 'info');
+                dukeSpeech.textContent = 'Higher! My number is bigger than that.';
+            } else if (state.lastFeedback === 'TOO_HIGH') {
+                setFeedback(`${guessedNumber} is too high. Try lower!`, 'info');
+                dukeSpeech.textContent = 'Lower! My number is smaller than that.';
+            } else {
+                setFeedback('', '');
+                dukeSpeech.textContent = "I'm thinking of a number between 1 and 10. Can you guess it?";
+            }
+            setDukeImage('images/duke-thinking.svg', false);
+        } else if (state.status === 'WON') {
+            guessForm.classList.add('hidden');
+            winForm.classList.remove('hidden');
+            document.getElementById('win-header').textContent =
+                `🎉 You got it in ${state.guessCount} guess${state.guessCount === 1 ? '' : 'es'}! Enter your name to post your score:`;
+            setFeedback('', '');
+            dukeSpeech.textContent = 'Woohoo! You guessed my number! 🎉';
+            setDukeImage('images/duke-wave.svg', true);
+        } else if (state.status === 'LOST') {
+            guessForm.classList.add('hidden');
+            setFeedback(
+                `Out of guesses! My number was ${state.secretNumber}. Better luck next time!`,
+                'warning'
+            );
+            dukeSpeech.textContent = `It was ${state.secretNumber}! Maybe next time? 😊`;
+            setDukeImage('images/duke-thinking.svg', false);
+        }
+
+        document.getElementById('guess-input').focus();
+    }
+
+    function setFeedback(text, type) {
+        const el = document.getElementById('feedback-message');
+        el.textContent = text;
+        el.className = 'message' + (type ? ' ' + type : '');
+    }
+
+    function setDukeImage(src, celebrate) {
+        const img = document.getElementById('duke-img');
+        img.classList.remove('celebrating');
+        img.src = src;
+        img.alt = celebrate ? 'Duke celebrating' : 'Duke thinking';
+        if (celebrate) {
+            // Force reflow so the animation re-triggers
+            void img.offsetWidth;
+            img.classList.add('celebrating');
+        }
+    }
+
+    // Allow pressing Enter in the guess input
+    document.getElementById('guess-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') submitGuess();
+    });
+
+    // Allow pressing Enter in the name input
+    document.getElementById('player-name').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') postScore();
+    });
+
+    // ---- Post score ----
+
+    async function postScore() {
+        const nameInput = document.getElementById('player-name');
+        const nameError = document.getElementById('name-error');
+        const name = nameInput.value;
+        const trimmed = name.trim();
+
+        nameError.classList.add('hidden');
+        nameError.textContent = '';
+
+        if (!trimmed) {
+            nameError.textContent = 'Please enter a name before posting.';
+            nameError.classList.remove('hidden');
+            nameInput.focus();
+            return;
+        }
+        if (trimmed.length > 30) {
+            nameError.textContent = 'Name must be 30 characters or fewer.';
+            nameError.classList.remove('hidden');
+            nameInput.focus();
+            return;
+        }
+
+        // Retrieve guess count from DOM
+        const guessCount = parseInt(document.getElementById('guess-count').textContent, 10);
+
+        try {
+            const resp = await fetch('/api/leaderboard', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ playerName: trimmed, guessCount })
+            });
+            if (resp.status === 201) {
+                setFeedback('Your score has been posted! 🏆', 'success');
+                document.getElementById('win-form').classList.add('hidden');
+                // Offer play-again
+                const pa = document.getElementById('play-again-area');
+                pa.innerHTML = '<button class="btn btn-primary" onclick="startNewGame()">🔄 Play Again</button>';
+            } else {
+                const data = await resp.json();
+                nameError.textContent = data.message || 'Could not post score.';
+                nameError.classList.remove('hidden');
+            }
+        } catch (e) {
+            nameError.textContent = 'Could not reach the server. Please try again.';
+            nameError.classList.remove('hidden');
+        }
+    }
+
+    // ---- Navigation ----
+
+    function showPage(name) {
+        document.getElementById('page-game').classList.toggle('hidden', name !== 'game');
+        document.getElementById('page-leaderboard').classList.toggle('hidden', name !== 'leaderboard');
+    }
+
+    async function showLeaderboard() {
+        showPage('leaderboard');
+        const content = document.getElementById('leaderboard-content');
+        content.innerHTML = '<p class="empty-note">Loading…</p>';
+
+        try {
+            const resp = await fetch('/api/leaderboard');
+            const entries = await resp.json();
+            if (!Array.isArray(entries) || entries.length === 0) {
+                content.innerHTML = '<p class="empty-note">No scores have been posted yet. Be the first!</p>';
+                return;
+            }
+            const rows = entries.map(e =>
+                `<tr>
+                    <td>${e.rank}</td>
+                    <td>${escapeHtml(e.playerName)}</td>
+                    <td>${e.guessCount}</td>
+                </tr>`
+            ).join('');
+            content.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Guesses</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        } catch (e) {
+            content.innerHTML = '<p class="empty-note" style="color:var(--danger)">Could not load the leaderboard.</p>';
+        }
+    }
+
+    function showGame() {
+        startNewGame();
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, '&amp;')
+                   .replace(/</g, '&lt;')
+                   .replace(/>/g, '&gt;')
+                   .replace(/"/g, '&quot;')
+                   .replace(/'/g, '&#039;');
+    }
+</script>
+
 </body>
 </html>

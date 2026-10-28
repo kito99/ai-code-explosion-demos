@@ -34,12 +34,8 @@ theme of the presentation.
 - A running count of guesses made and guesses remaining.
 - A limited number of guesses per game, with a lose state when they run out.
 - The ability to start a new game at any time.
-- Telemetry emitted by the running app so its behavior and health can be
-  observed.
-- An HTTP API for the server-side game actions, described by an OpenAPI
-  definition and browsable through interactive documentation.
 - A name entered by the player when they win, so their score can be posted.
-- A leaderboard of winning results that outlives the app process.
+- A leaderboard of winning results.
 - A screen that displays the leaderboard.
 
 ### 4.2 Out of Scope
@@ -53,9 +49,6 @@ theme of the presentation.
 - Per-player history or statistics beyond the single list of best results.
 - Difficulty levels or configurable number ranges or guess limits.
 - Multiplayer or turn-based play against other people.
-- A hosted, long-term telemetry store or dashboards built on top of it.
-- Versioning or backward-compatibility commitments to third-party consumers
-  of the API.
 
 ## 5. Stakeholders
 
@@ -123,9 +116,9 @@ theme of the presentation.
   visible character after surrounding whitespace is trimmed and is no longer than
   30 characters. If it is not acceptable, the system shows a friendly message and
   records nothing until a valid name is entered.
-- **FR-15 — Recording a result.** A posted result stores the name, the number of
-  accepted guesses the win took, and when it happened. Each winning game creates
-  its own entry; nothing is overwritten.
+- **FR-15 — Recording a result.** A posted result records the name, the number
+  of accepted guesses the win took, and when it happened. Each winning game
+  creates its own entry; nothing is overwritten.
 - **FR-16 — No entry for a loss.** A game that ends in the lose state (see
   FR-11) records nothing, because there is no winning guess count.
 - **FR-17 — Leaderboard screen.** A separate screen lists the best results,
@@ -155,37 +148,14 @@ theme of the presentation.
   player what just happened and what they can do next.
 - **NFR-5 - Duke Images.** The game includes the official Duke image to 
   represent the character (repository: https://github.com/openjdk/duke).
-- **NFR-6 — Observability.** The app is observable through telemetry it emits
-  while running. It produces traces, metrics, and structured logs covering the
-  game lifecycle and every API request, so someone can answer how often games
-  are started, won, and lost, how long requests take, and where errors come
-  from, without reading the source. Telemetry uses an open standard such as
-  OpenTelemetry so it can be sent to any compatible collector, and the
-  destination is configurable without a code change. Telemetry carries no
-  personally identifying information. When no collector is reachable, the game
-  still plays and still meets NFR-2, so telemetry delivery never delays player
-  feedback.
-- **NFR-7 — OpenAPI.** Every server-side game action the front-end performs is
-  available through an HTTP API described by an OpenAPI definition. The
-  definition is served by the running app, covers each endpoint's request shape,
-  response shape, and error responses, and stays in sync with the
-  implementation. The app also serves human-readable API documentation generated
-  from that definition so a developer can read and try the API in a browser.
-- **NFR-8 — Durable storage.** Leaderboard entries are kept in a database and
-  survive a restart of the app. Consistent with NFR-1, no specific database
-  product or data access technology is mandated by this document.
-- **NFR-9 — Name handling.** The name a player types is the only personal data
-  the app stores. It appears on the leaderboard and nowhere else; in particular
-  it is never written to telemetry, which NFR-6 requires to stay free of
-  personally identifying information.
 
 ## 8. Assumptions
 
 - The player is on a single device and plays one game at a time.
-- An in-progress game does not persist; refreshing the page starts a new game.
-  Leaderboard entries do persist (see NFR-8).
-- The app runs as a single instance against one database, so every player shares
-  the same leaderboard.
+- An in-progress game is not carried over; refreshing the page starts a new
+  game.
+- The app runs as a single instance, so every player shares the same
+  leaderboard.
 - A suitable Duke image or graphic is available to display.
 
 ## 9. Success Criteria
@@ -197,15 +167,9 @@ theme of the presentation.
 - The guesses-remaining count is always accurate and never drops below zero.
 - Duke is clearly visible as the character thinking of the number, and plays his
   celebration animation when the player wins.
-- Playing games through to both a win and a loss produces telemetry covering
-  those outcomes and the API requests behind them, visible wherever the app is
-  currently configured to send it.
-- The running app serves an OpenAPI definition that matches its endpoints, along
-  with browsable documentation generated from it.
 - Winning and entering a valid name adds a leaderboard entry showing that name
   and the right number of guesses, while losing adds nothing.
 - The leaderboard orders entries by fewest guesses, breaks ties by which was
   recorded first, and shows no more than 10.
-- Leaderboard entries are still there after the app restarts.
 - With nothing recorded, the leaderboard screen explains that no scores have
   been posted yet.

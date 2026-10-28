@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number with Duke</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+            padding: 1rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 1.5rem;
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f0ad00;
+            margin-bottom: 0.25rem;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #a0a8c0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Duke character */
+        .duke-container {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 1.5rem;
+        }
+
+        .duke-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .duke-img.hidden { display: none; }
+
+        /* Celebration animation */
+        @keyframes dukeJump {
+            0%   { transform: translateY(0px) rotate(0deg); }
+            20%  { transform: translateY(-28px) rotate(-5deg); }
+            40%  { transform: translateY(0px) rotate(0deg); }
+            55%  { transform: translateY(-18px) rotate(4deg); }
+            70%  { transform: translateY(0px) rotate(0deg); }
+            82%  { transform: translateY(-10px) rotate(-2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .duke-img.celebrating {
+            animation: dukeJump 1.5s ease-in-out 1 forwards;
+        }
+
+        /* Status badges */
+        .guess-counter {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .badge {
+            background: rgba(240,173,0,0.15);
+            border: 1px solid rgba(240,173,0,0.4);
+            border-radius: 2rem;
+            padding: 0.35rem 0.9rem;
+            font-weight: 600;
+            color: #f0ad00;
+        }
+
+        .badge.dim {
+            background: rgba(160,168,192,0.1);
+            border-color: rgba(160,168,192,0.3);
+            color: #a0a8c0;
+        }
+
+        /* Message box */
+        .message {
+            background: rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            padding: 0.85rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            min-height: 3rem;
+        }
+
+        .message.win  { border-left: 4px solid #4caf50; color: #a8f0ab; }
+        .message.lose { border-left: 4px solid #ef5350; color: #f09090; }
+        .message.hint { border-left: 4px solid #f0ad00; }
+
+        /* Forms */
+        .guess-form {
+            display: flex;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"], input[type="number"] {
+            flex: 1;
+            padding: 0.7rem 1rem;
+            border-radius: 0.6rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.08);
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: #f0ad00;
+            background: rgba(255,255,255,0.12);
+        }
+
+        button {
+            padding: 0.7rem 1.4rem;
+            border-radius: 0.6rem;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:hover  { opacity: 0.9; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
+
+        .btn-primary {
+            background: #f0ad00;
+            color: #1a1a2e;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-success {
+            background: #4caf50;
+            color: #fff;
+        }
+
+        /* Win section */
+        .win-section {
+            margin-top: 1rem;
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .win-section p {
+            font-size: 0.9rem;
+            color: #a0a8c0;
+            margin-bottom: 0.75rem;
+        }
+
+        .name-form {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .error-msg {
+            color: #f09090;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            text-align: left;
+        }
+
+        /* Nav */
+        .nav-link {
+            display: inline-block;
+            margin-top: 1.25rem;
+            color: #a0a8c0;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-link:hover { color: #f0ad00; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>Guess the Number!</h1>
+    <p class="subtitle">Duke is thinking of a number from 1 to 10…</p>
+
+    <!-- Duke image -->
+    <div class="duke-container" aria-hidden="true">
+        <!-- Thinking duke (shown during active or lost game) -->
+        <img th:src="@{/images/duke-thinking.svg}"
+             th:classappend="${game.status.name() == 'WON'} ? ' hidden' : ''"
+             class="duke-img"
+             alt="Duke thinking"
+             id="duke-thinking" />
+        <!-- Celebrating duke (shown on win) -->
+        <img th:src="@{/images/duke-thumbsup.svg}"
+             th:classappend="${game.status.name() == 'WON'} ? ' celebrating' : ' hidden'"
+             class="duke-img"
+             alt="Duke celebrating"
+             id="duke-celebrate" />
+    </div>
+
+    <!-- Guess counters -->
+    <div class="guess-counter" th:if="${game.status.name() == 'ACTIVE'}">
+        <span class="badge" th:text="'Guesses used: ' + ${game.guessesUsed()}">Guesses used: 0</span>
+        <span class="badge" th:text="'Remaining: ' + ${game.guessesRemaining()}">Remaining: 5</span>
+    </div>
+
+    <!-- Message -->
+    <div th:classappend="${game.status.name() == 'WON'} ? ' win' : (${game.status.name() == 'LOST'} ? ' lose' : ' hint')"
+         class="message"
+         th:text="${game.message()}"
+         role="status"
+         aria-live="polite">
+    </div>
+
+    <!-- Guess form (active game only) -->
+    <form th:if="${game.status.name() == 'ACTIVE'}" action="/guess" method="post" class="guess-form" autocomplete="off">
+        <input type="number"
+               name="guess"
+               id="guess"
+               min="1" max="10"
+               placeholder="1 – 10"
+               aria-label="Your guess"
+               required
+               autofocus />
+        <button type="submit" class="btn-primary">Guess</button>
+    </form>
+
+    <!-- Win: post score section -->
+    <div th:if="${game.status.name() == 'WON'}" class="win-section">
+        <p>Post your score to the leaderboard:</p>
+        <form action="/post-score" method="post" class="name-form" autocomplete="off">
+            <input type="text"
+                   name="playerName"
+                   placeholder="Your name"
+                   maxlength="30"
+                   aria-label="Your name"
+                   autofocus />
+            <button type="submit" class="btn-success">Post</button>
+        </form>
+        <p th:if="${nameError}" class="error-msg" th:text="${nameError}" role="alert"></p>
+    </div>
+
+    <!-- New game / play again -->
+    <form action="/new-game" method="post" style="margin-top: 1rem;">
+        <button type="submit" class="btn-secondary">
+            <span th:text="${game.status.name() == 'ACTIVE'} ? '🔄 New Game' : '🎮 Play Again'">New Game</span>
+        </button>
+    </form>
+
+    <a href="/leaderboard" class="nav-link">🏆 View Leaderboard</a>
+</div>
+
+<script>
+    // Ensure Duke celebrate animation only runs once and resets
+    const celebrateDuke = document.getElementById('duke-celebrate');
+    if (celebrateDuke && celebrateDuke.classList.contains('celebrating')) {
+        celebrateDuke.addEventListener('animationend', () => {
+            celebrateDuke.classList.remove('celebrating');
+        }, { once: true });
+    }
+</script>
+</body>
+</html>

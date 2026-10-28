@@ -13,136 +13,105 @@
     <properties>
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Jakarta EE 11 APIs -->
-        <jakarta.jakartaee-api.version>11.0.0</jakarta.jakartaee-api.version>
-        <!-- MicroProfile -->
-        <microprofile.version>7.1</microprofile.version>
-        <!-- Open Liberty -->
-        <liberty.maven.plugin.version>3.11.4</liberty.maven.plugin.version>
-        <!-- PostgreSQL -->
-        <postgresql.version>42.7.4</postgresql.version>
-        <!-- Testcontainers -->
-        <testcontainers.version>1.20.4</testcontainers.version>
-        <!-- Testing -->
-        <junit.version>5.11.4</junit.version>
-        <rest.assured.version>5.5.0</rest.assured.version>
+        <liberty.var.http.port>9080</liberty.var.http.port>
+        <liberty.var.https.port>9443</liberty.var.https.port>
     </properties>
 
     <dependencies>
-        <!-- Jakarta EE 11 Web Profile -->
+        <!-- Jakarta EE 11 specifications (provided by Open Liberty at runtime) -->
         <dependency>
-            <groupId>jakarta.platform</groupId>
-            <artifactId>jakarta.jakartaee-web-api</artifactId>
-            <version>${jakarta.jakartaee-api.version}</version>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>4.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.enterprise</groupId>
+            <artifactId>jakarta.enterprise.cdi-api</artifactId>
+            <version>4.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+            <version>2.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.json.bind</groupId>
+            <artifactId>jakarta.json.bind-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.data</groupId>
+            <artifactId>jakarta.data-api</artifactId>
+            <version>1.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>3.0.0</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- MicroProfile 7.1 -->
+        <!-- MicroProfile 7.0 (compatible with Open Liberty 25.x) -->
         <dependency>
             <groupId>org.eclipse.microprofile</groupId>
             <artifactId>microprofile</artifactId>
-            <version>${microprofile.version}</version>
+            <version>7.0</version>
             <type>pom</type>
             <scope>provided</scope>
         </dependency>
 
-        <!-- OpenTelemetry API (provided by mpTelemetry feature) -->
+        <!-- Derby embedded for the leaderboard DB (copied into Liberty shared resources) -->
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
-            <version>1.44.1</version>
-            <scope>provided</scope>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>10.17.1.0</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry.instrumentation</groupId>
-            <artifactId>opentelemetry-instrumentation-annotations</artifactId>
-            <version>2.10.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- PostgreSQL JDBC driver — runtime scope so copyDependencies can copy it to the server lib -->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derbytools</artifactId>
+            <version>10.17.1.0</version>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- Test dependencies -->
+        <!-- ── Test dependencies ─────────────────────────── -->
+
+        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
+            <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>testcontainers</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.testcontainers</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${testcontainers.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
-            <version>${rest.assured.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>2.0.16</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 
     <build>
-        <finalName>jakarta-ee-demo-bob-claude-opus-4-5_1</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
-            <plugin>
-                <groupId>io.openliberty.tools</groupId>
-                <artifactId>liberty-maven-plugin</artifactId>
-                <version>${liberty.maven.plugin.version}</version>
-                <configuration>
-                    <serverName>guessTheNumber</serverName>
-                    <copyDependencies>
-                        <dependencyGroup>
-                            <!-- Resolved at build time to the server config dir inside the Liberty install -->
-                            <location>${project.build.directory}/liberty/wlp/usr/servers/guessTheNumber/lib/postgres</location>
-                            <dependency>
-                                <groupId>org.postgresql</groupId>
-                                <artifactId>postgresql</artifactId>
-                            </dependency>
-                        </dependencyGroup>
-                    </copyDependencies>
-                </configuration>
-                <executions>
-                    <!-- Build and install the server during the package phase -->
-                    <execution>
-                        <id>liberty-package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>create</goal>
-                            <goal>install-feature</goal>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                    <!-- Start/stop Liberty around integration tests;
-                         DB env vars are supplied by LibertyServerExtension
-                         which calls `mvn liberty:start` with the correct vars -->
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -151,21 +120,85 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
+
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.5.2</version>
-                <!-- Only run unit tests here (classes matching *Test) -->
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>3.11.4</version>
                 <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
+                    <serverName>defaultServer</serverName>
+                    <runtimeArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>26.0.0.10</version>
+                        <type>zip</type>
+                    </runtimeArtifact>
+                    <copyDependencies>
+                        <dependencyGroup>
+                            <location>${project.build.directory}/liberty/wlp/usr/shared/resources/derby</location>
+                            <stripVersion>true</stripVersion>
+                            <dependency>
+                                <groupId>org.apache.derby</groupId>
+                                <artifactId>derby</artifactId>
+                            </dependency>
+                            <dependency>
+                                <groupId>org.apache.derby</groupId>
+                                <artifactId>derbytools</artifactId>
+                            </dependency>
+                        </dependencyGroup>
+                    </copyDependencies>
                 </configuration>
+                <executions>
+                    <!-- 1. Download Liberty runtime -->
+                    <execution>
+                        <id>create-liberty</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                    <!-- 2. Install required features -->
+                    <execution>
+                        <id>install-feature</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>install-feature</goal>
+                        </goals>
+                    </execution>
+                    <!-- 3. Deploy the WAR into the server -->
+                    <execution>
+                        <id>deploy</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>start-liberty</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop-liberty</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.5.2</version>
+                <version>3.3.1</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <liberty.http.port>${liberty.var.http.port}</liberty.http.port>
+                    </systemPropertyVariables>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
@@ -174,14 +207,12 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <!-- IT classes matching *IT -->
-                    <includes>
-                        <include>**/*IT.java</include>
-                    </includes>
-                    <!-- Give Testcontainers + Liberty startup enough time -->
-                    <forkedProcessTimeoutInSeconds>300</forkedProcessTimeoutInSeconds>
-                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.3.1</version>
             </plugin>
         </plugins>
     </build>

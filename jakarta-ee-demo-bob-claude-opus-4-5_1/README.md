@@ -1,41 +1,38 @@
-# Guess the Number with Duke — Jakarta EE Demo
+# jakarta-ee-demo-bob-claude-opus-4-5_1
 
-A web-based guessing game backed by Open Liberty, Jakarta EE 11, and
-MicroProfile 7.1. Duke (the Java mascot) thinks of a number between 1 and 10;
-the player has 5 guesses to find it. Winning scores are posted to a persistent
-leaderboard.
+Guess the Number with Duke — Jakarta EE 11 / Open Liberty demo.
 
----
-
-## Generation metadata
+## Generation details
 
 | Field | Value |
 |---|---|
-| Date of generation | 2026-10-27 |
+| Date | 2026-10-28 |
 | Agent harness | Bob (IBM Bob) |
-| Model | claude-opus-4-5 |
+| Model | Claude claude-opus-4-5 |
+| Open Liberty version | 26.0.0.10 |
+| Jakarta EE version | 11.0 |
 
-### Lines of code
+## Lines of code
 
-Commands run from `jakarta-ee-demo-bob-claude-opus-4-5_1/`.
+Commands run from the `jakarta-ee-demo-bob-claude-opus-4-5_1/` directory.
 
-**Application code** (Java + Maven + XML + config; excludes HTML, CSS, JS, SVG):
+**Application code** (Java + build + config, no HTML/CSS/JS/SVG):
 
 ```
 cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/main pom.xml
 ```
 
 ```
-github.com/AlDanial/cloc v 2.06  T=0.02 s (774.6 files/s, 36732.1 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.02 s (682.0 files/s, 29967.2 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                            14             88             72            452
-Maven                            1              8             18            161
-XML                              3             11              3             72
+Java                            11             65             66            282
+Maven                            1             12              8            199
+XML                              3             10              2             43
 Properties                       1              2              9              5
 -------------------------------------------------------------------------------
-SUM:                            19            109            102            690
+SUM:                            16             89             85            529
 -------------------------------------------------------------------------------
 ```
 
@@ -46,187 +43,68 @@ cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/test
 ```
 
 ```
-github.com/AlDanial/cloc v 2.06  T=0.02 s (256.2 files/s, 31708.1 lines/s)
+github.com/AlDanial/cloc v 2.06  T=0.01 s (160.3 files/s, 20440.9 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
-Java                             4             69             27            399
+Java                             2             36             20            199
 -------------------------------------------------------------------------------
-SUM:                             4             69             27            399
+SUM:                             2             36             20            199
 -------------------------------------------------------------------------------
 ```
 
----
+## Architecture
 
-## Architecture overview
+- **Backend:** Open Liberty 26.0.0.10 with Jakarta EE 11 (`jakartaee-11.0` feature)
+- **Database:** Apache Derby embedded — no external database required; data lives under `target/liberty/wlp/usr/servers/defaultServer/data/leaderboard/`
+- **Game sessions:** held in-memory (`ConcurrentHashMap`) — refreshing starts a new game
+- **Leaderboard:** persisted to Derby via Jakarta Data + Jakarta Persistence
 
-| Layer | Technology |
+## Ports
+
+| Protocol | Port |
 |---|---|
-| HTTP runtime | Open Liberty 24.x |
-| REST API | Jakarta RESTful Web Services (JAX-RS) 4.0 |
-| CDI | Jakarta CDI 4.1 |
-| Persistence | Jakarta Persistence (JPA) 3.2 — EclipseLink |
-| JSON binding | Jakarta JSON-B 3.0 |
-| Observability | MicroProfile Telemetry 2.1 (OpenTelemetry) |
-| API docs | MicroProfile OpenAPI 4.0 |
-| Database | PostgreSQL 18 |
-| Front-end | Vanilla HTML / CSS / JavaScript (served as static files) |
+| HTTP | 9080 |
+| HTTPS | 9443 |
 
----
+## Build, test, and run
 
-## Prerequisites
+All commands must be run from the `jakarta-ee-demo-bob-claude-opus-4-5_1/` directory.
 
-- Java 21+
-- Maven 3.9+
-- Docker (for the database and for Testcontainers in tests)
-- `cloc` (only to reproduce the line counts above)
-
----
-
-## Supporting services
-
-### Start
+**Build and run unit tests only:**
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-docker compose up -d
-```
-
-### Stop
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-docker compose down
-```
-
-### Ports
-
-| Service | Port |
-|---|---|
-| Application (HTTP) | 9080 |
-| Application (HTTPS) | 9443 |
-| PostgreSQL | 5432 |
-
----
-
-## Database
-
-| Setting | Value |
-|---|---|
-| Host | `localhost` |
-| Port | `5432` |
-| Database name | `guessdb` |
-| Username | `guessuser` |
-| Password | `guesspass` |
-
-### Schema creation
-
-The schema is generated automatically by JPA (EclipseLink) on first start using:
-
-```xml
-<property name="jakarta.persistence.schema-generation.database.action" value="create"/>
-```
-
-No manual SQL step is required on a fresh database.
-
-### Clear the leaderboard between runs
-
-```sql
-psql -h localhost -U guessuser -d guessdb -c "DELETE FROM leaderboard_entry;"
-```
-
-Or via Docker:
-
-```bash
-docker compose exec db psql -U guessuser -d guessdb -c "DELETE FROM leaderboard_entry;"
-```
-
----
-
-## Build
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-mvn package
-```
-
-This creates, configures, and packages the Liberty server under
-`target/liberty/wlp/`.
-
----
-
-## Run
-
-Start the database first (see above), then:
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-mvn liberty:run
-```
-
-Or start Liberty in the background:
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-mvn liberty:start
-```
-
-Stop:
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
-mvn liberty:stop
-```
-
-The game is served at <http://localhost:9080/>.
-
----
-
-## Test
-
-Unit tests run without any external dependencies:
-
-```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn test
 ```
 
-Integration tests (`*IT`) start a PostgreSQL Testcontainer and the Liberty
-server automatically — no database or server needs to be running beforehand:
+**Build, run unit tests + integration tests (starts and stops Liberty automatically):**
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn verify
 ```
 
----
+**Run the app (starts Liberty in the foreground; Ctrl-C stops it):**
 
-## URLs
-
-| URL | Description |
-|---|---|
-| <http://localhost:9080/> | Game |
-| <http://localhost:9080/leaderboard.html> | Leaderboard |
-| <http://localhost:9080/openapi> | OpenAPI definition (JSON/YAML) |
-| <http://localhost:9080/openapi/ui> | Interactive API documentation (Swagger UI) |
-
----
-
-## Telemetry
-
-Traces, metrics, and logs are exported to the **console** by default using the
-OpenTelemetry `logging` exporter. Look for lines prefixed with `[otel]` or the
-span/metric exporter output in the Liberty console log.
-
-To point the app at a real OTLP collector, change these properties in
-[`src/main/resources/META-INF/microprofile-config.properties`](src/main/resources/META-INF/microprofile-config.properties):
-
-```properties
-otel.exporter.otlp.endpoint=http://your-collector:4317
-otel.traces.exporter=otlp
-otel.metrics.exporter=otlp
-otel.logs.exporter=otlp
+```bash
+mvn liberty:run
 ```
 
-No code change is required — MicroProfile Config picks up these values at
-startup.
+Once running, open: <http://localhost:9080/>
+
+## Leaderboard URL
+
+<http://localhost:9080/> — use the "🏆 Leaderboard" button in the app, or navigate to the leaderboard directly via the in-app navigation.
+
+## Clearing the leaderboard
+
+The app has no delete API. To clear all entries between runs, stop the server and delete the Derby database directory:
+
+```bash
+rm -rf target/liberty/wlp/usr/servers/defaultServer/data/leaderboard
+```
+
+The next `mvn liberty:run` or `mvn verify` recreates the schema automatically.
+
+## Other dependencies
+
+None. Derby is bundled and copied into the Liberty shared-resources directory during the build. No running database or other external service is needed.

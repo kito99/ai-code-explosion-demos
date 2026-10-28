@@ -23,8 +23,6 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 
 - Exceptions or Errors should only be caught without rethrowing (i.e. swallowed) when the calling code can properly recover without side-effects
 - Favor unchecked exceptions
-- Use custom exceptions or errors when the type can be a helpful description of the error (e.g. PersistenceException or SyntaxException)
-- Use base exceptions when it makes sense semantically, or you need to reuse core logic
 
 # Java
 
@@ -44,12 +42,6 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 - Favor using virtual threads all the way down the call stack unless you’re modifying existing reactive code.
 - Use Markdown for Javadoc comment (JDK 23+)
 - Prefer using streams and lambdas for iterations and transformations.
-
-# Development Instructions
-
-- When writing code, respect DRY, KISS, and Law of Demeter; keep Cyclomatic Complexity below 15; do not use magic numbers.
-- After completing all code changes, review if project `README.md` needs to abe updated based on your changes, and update if necessary.
-
 
 # Writing Style
 
@@ -71,19 +63,6 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 - When fixing a bug, first write a failing test.
 - State your diagnosis and which file/method you'll change BEFORE writing code. Always wait for confirmation. This also applies to non-trivial new features: describe the approach before implementing.
 - Do not over-apply fixes. Stay within the requested scope.
-
-# Self-Review
-
-- When working on a task, after completing all code changes, spawn a "Code Reviewer" agent at high effort using a different model and perform a self-review of the full diff before presenting the result. Check for:
-  - Violations of the General Principles above
-  - Missing edge cases or error handling at system boundaries
-  - Naming/style/formatting consistency with surrounding code
-  - Security: injection risks, sensitive data exposure, unsanitized input at system boundaries
-  - Unnecessary changes or scope creep
-  - Ripple effects: when changing a method signature, callback contract, or API, grep for ALL callers/consumers (including sandbox tests, unit tests, and integration tests) and update them
-  - Unit/integration test coverage for new/changed logic (only when project already has test setup)
-  - Anything a human expert would reasonably flag
-- Do NOT flag intentional design choices as bugs. If unsure, list separately as "needs clarification". Add a clarifying inline comment to prevent future false flags.
 
 # Version Control
 

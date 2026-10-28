@@ -1,0 +1,26 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - heading "Guess the Number with Duke" [level=1] [ref=e4]
+    - paragraph [ref=e5]: Duke is thinking of a number from 1 to 10. You get 5 guesses.
+  - generic [ref=e6]:
+    - figure [ref=e7]:
+      - img "Duke, thinking of a number" [ref=e8]
+    - region "Game status" [ref=e9]:
+      - heading "Game status" [level=2] [ref=e10]
+      - status [ref=e11]: Duke is thinking of a number from 1 to 10. Take a guess!
+      - paragraph [ref=e12]:
+        - generic [ref=e13]:
+          - text: "Guesses made:"
+          - strong [ref=e14]: "0"
+        - generic [ref=e15]:
+          - text: "Guesses left:"
+          - strong [ref=e16]: "5"
+      - generic [ref=e17]:
+        - generic [ref=e18]: Your guess (1–10)
+        - generic [ref=e19]:
+          - textbox "Your guess (1–10)" [active] [ref=e20]
+          - button "Guess" [ref=e21] [cursor=pointer]
+      - generic [ref=e22]:
+        - button "New game" [ref=e23] [cursor=pointer]
+        - link "Leaderboard" [ref=e24] [cursor=pointer]:
+          - /url: leaderboard.html

@@ -1,0 +1,218 @@
+:root {
+    --page-background: #0f2027;
+    --card-background: #ffffff;
+    --ink: #1b1b1b;
+    --muted-ink: #4a4a4a;
+    --accent: #8b1a3a;
+    --accent-ink: #ffffff;
+    --rule: #d8d8d8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: linear-gradient(160deg, #0f2027, #203a43 60%, #2c5364);
+    color: var(--ink);
+    font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.card {
+    width: min(46rem, 100%);
+    background: var(--card-background);
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 1.25rem 3rem rgba(0, 0, 0, 0.35);
+}
+
+.card-header h1 {
+    margin: 0 0 0.25rem;
+    font-size: 1.75rem;
+}
+
+.subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--muted-ink);
+}
+
+.stage {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.duke {
+    margin: 0;
+    flex: 0 0 11rem;
+    height: 14rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.duke img {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    transform-origin: bottom center;
+}
+
+.play {
+    flex: 1 1 18rem;
+    min-width: 16rem;
+}
+
+.message {
+    margin: 0 0 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    min-height: 3rem;
+}
+
+.message.error {
+    color: var(--accent);
+}
+
+.counts {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--muted-ink);
+}
+
+label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--muted-ink);
+    margin-bottom: 0.25rem;
+}
+
+.row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+input[type="text"] {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    font-size: 1rem;
+    border: 2px solid var(--rule);
+    border-radius: 0.5rem;
+}
+
+input[type="text"]:focus-visible,
+button:focus-visible,
+.link-button:focus-visible {
+    outline: 3px solid #0b63c5;
+    outline-offset: 2px;
+}
+
+button,
+.link-button {
+    padding: 0.6rem 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--accent);
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: var(--accent-ink);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button[disabled] {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    flex-wrap: wrap;
+}
+
+.actions button,
+.actions .link-button {
+    background: transparent;
+    color: var(--accent);
+}
+
+.score-form {
+    margin-top: 1rem;
+}
+
+.leaderboard {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.leaderboard th,
+.leaderboard td {
+    text-align: left;
+    padding: 0.6rem 0.5rem;
+    border-bottom: 1px solid var(--rule);
+}
+
+.leaderboard th:last-child,
+.leaderboard td:last-child {
+    text-align: right;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Duke springs up and settles back down three times, then rests. */
+@keyframes duke-jump {
+    0%, 100% { transform: translateY(0); }
+    15% { transform: translateY(-2.5rem); }
+    30% { transform: translateY(0); }
+    45% { transform: translateY(-1.75rem); }
+    60% { transform: translateY(0); }
+    75% { transform: translateY(-1rem); }
+    90% { transform: translateY(0); }
+}
+
+@keyframes duke-wave {
+    0%, 100% { transform: rotate(0deg); }
+    20% { transform: rotate(-9deg); }
+    40% { transform: rotate(7deg); }
+    60% { transform: rotate(-7deg); }
+    80% { transform: rotate(5deg); }
+}
+
+.duke.celebrating {
+    animation: duke-jump 1.5s ease-in-out 1;
+}
+
+.duke.celebrating img {
+    animation: duke-wave 0.5s ease-in-out 3;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .duke.celebrating,
+    .duke.celebrating img {
+        animation: none;
+    }
+}

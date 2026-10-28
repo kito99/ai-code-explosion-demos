@@ -85,10 +85,10 @@ In the `README.md` file, record the following:
 Also record:
 
 * How to start and stop the supporting services
-* The ports the app and the database listen to on
+* The ports the app and the database listen on
 * The database name, user, and password the app defaults to
 * How the schema gets created
-* The URLs for the OpenAPI documentation and the leaderboard screen
+* The URL for the leaderboard screen
 * How to clear the leaderboard between runs, since the app itself has no way to
   delete entries
 

@@ -34,8 +34,6 @@ theme of the presentation.
 - A running count of guesses made and guesses remaining.
 - A limited number of guesses per game, with a lose state when they run out.
 - The ability to start a new game at any time.
-- An HTTP API for the server-side game actions, described by an OpenAPI
-  definition and browsable through interactive documentation.
 - A name entered by the player when they win, so their score can be posted.
 - A leaderboard of winning results that outlives the app process.
 - A screen that displays the leaderboard.
@@ -51,8 +49,6 @@ theme of the presentation.
 - Per-player history or statistics beyond the single list of best results.
 - Difficulty levels or configurable number ranges or guess limits.
 - Multiplayer or turn-based play against other people.
-- Versioning or backward-compatibility commitments to third-party consumers
-  of the API.
 
 ## 5. Stakeholders
 
@@ -152,12 +148,6 @@ theme of the presentation.
   player what just happened and what they can do next.
 - **NFR-5 - Duke Images.** The game includes the official Duke image to 
   represent the character (repository: https://github.com/openjdk/duke).
-- **NFR-7 — OpenAPI.** Every server-side game action the front-end performs is
-  available through an HTTP API described by an OpenAPI definition. The
-  definition is served by the running app, covers each endpoint's request shape,
-  response shape, and error responses, and stays in sync with the
-  implementation. The app also serves human-readable API documentation generated
-  from that definition so a developer can read and try the API in a browser.
 - **NFR-8 — Durable storage.** Leaderboard entries are kept in a database and
   survive a restart of the app. Consistent with NFR-1, no specific database
   product or data access technology is mandated by this document.
@@ -180,8 +170,6 @@ theme of the presentation.
 - The guesses-remaining count is always accurate and never drops below zero.
 - Duke is clearly visible as the character thinking of the number, and plays his
   celebration animation when the player wins.
-- The running app serves an OpenAPI definition that matches its endpoints, along
-  with browsable documentation generated from it.
 - Winning and entering a valid name adds a leaderboard entry showing that name
   and the right number of guesses, while losing adds nothing.
 - The leaderboard orders entries by fewest guesses, breaks ties by which was

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="icon" href="images/duke-thinking.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="page">
+    <header class="page__header">
+        <h1>Guess the Number with Duke</h1>
+        <a class="link" href="leaderboard.html">Leaderboard</a>
+    </header>
+
+    <main class="card">
+        <div class="duke-stage">
+            <img id="duke" class="duke" src="images/duke-thinking.svg" alt="Duke, thinking of a number">
+        </div>
+
+        <p id="message" class="message" role="status" aria-live="polite">
+            Starting a game&hellip;
+        </p>
+
+        <p class="counters">
+            <span>Guesses made: <strong id="guesses-made">0</strong></span>
+            <span>Guesses left: <strong id="guesses-left">5</strong></span>
+        </p>
+
+        <form id="guess-form" class="row" novalidate>
+            <label class="label" for="guess">Your guess</label>
+            <input id="guess" class="input input--number" name="guess" type="number"
+                   min="1" max="10" step="1" inputmode="numeric" autocomplete="off" autofocus>
+            <button id="guess-button" class="button button--primary" type="submit">Guess</button>
+        </form>
+
+        <form id="score-form" class="row row--stacked" hidden novalidate>
+            <label class="label" for="player-name">Post your win</label>
+            <div class="row">
+                <input id="player-name" class="input" name="name" type="text" maxlength="30"
+                       autocomplete="off" placeholder="Your name">
+                <button class="button button--primary" type="submit">Post score</button>
+            </div>
+        </form>
+
+        <p class="row">
+            <button id="play-again" class="button" type="button">Play again</button>
+            <a class="link" href="leaderboard.html">See the leaderboard</a>
+        </p>
+    </main>
+
+    <footer class="page__footer">
+        <p>
+            Duke is from the <a class="link" href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.
+        </p>
+    </footer>
+</div>
+
+<script src="js/game.js"></script>
+</body>
+</html>

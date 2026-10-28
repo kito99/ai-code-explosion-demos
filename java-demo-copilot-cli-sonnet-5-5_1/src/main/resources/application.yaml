@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: java-demo-copilot-cli-sonnet-5-5_1
+  threads:
+    virtual:
+      enabled: true
+  jackson:
+    deserialization:
+      # A fractional guess is not a whole number, so it must not be truncated into one.
+      accept-float-as-int: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dukedb
+    username: duke
+    password: duke
+  sql:
+    init:
+      # schema.sql is idempotent, so a fresh database gets its table on first start.
+      mode: always
+
+server:
+  port: 8080
+
+logging:
+  structured:
+    format:
+      console: ecs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        # Off by default so nothing tries to reach a collector that is not running.
+        enabled: false
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+duke:
+  game:
+    session-timeout: 30m
+  telemetry:
+    console-traces: true
+    console-metrics: true
+    console-metrics-interval: 30s

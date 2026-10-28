@@ -1,0 +1,52 @@
+spring:
+  jackson:
+    deserialization:
+      # A fractional guess is not a whole number, so it is turned down rather than truncated.
+      accept-float-as-int: false
+  # Carried into the OpenTelemetry service name, so telemetry says which demo produced it.
+  application:
+    name: java-demo-claude-code-opus-5_2
+  threads:
+    virtual:
+      enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5434/dukedb
+    username: duke
+    password: duke
+  flyway:
+    enabled: true
+
+server:
+  port: 8081
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  structured:
+    format:
+      console: ecs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  tracing:
+    sampling:
+      # A demo wants every round traced, not a tenth of them.
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        # Turned on, with a url, to push meters to a collector. Off by default so the app
+        # needs nothing else running.
+        enabled: false
+
+duke:
+  game:
+    session-lifetime: 2h
+  telemetry:
+    console-traces: true
+    console-metrics: true

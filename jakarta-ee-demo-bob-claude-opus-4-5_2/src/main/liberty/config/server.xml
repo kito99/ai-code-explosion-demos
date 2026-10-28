@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+    <featureManager>
+        <platform>jakartaee-11.0</platform>
+        <platform>microprofile-7.1</platform>
+        <feature>restfulWS</feature>
+        <feature>cdi</feature>
+        <feature>jpa</feature>
+        <feature>jsonb</feature>
+        <feature>jsonp</feature>
+        <feature>servlet</feature>
+        <feature>beanValidation</feature>
+        <feature>mpConfig</feature>
+        <feature>mpOpenAPI</feature>
+        <feature>mpTelemetry</feature>
+        <feature>jdbc</feature>
+    </featureManager>
+
+    <httpEndpoint id="defaultHttpEndpoint"
+                  httpPort="${http.port}"
+                  httpsPort="${https.port}"
+                  host="*"/>
+
+    <webApplication location="jakarta-ee-demo-bob-claude-opus-4-5_2.war" contextRoot="/"/>
+
+    <!-- PostgreSQL DataSource -->
+    <dataSource id="DefaultDataSource" jndiName="jdbc/guessDB">
+        <jdbcDriver libraryRef="PostgresLib"/>
+        <properties.postgresql
+            serverName="${env.DB_HOST}"
+            portNumber="${env.DB_PORT}"
+            databaseName="${env.DB_NAME}"
+            user="${env.DB_USER}"
+            password="${env.DB_PASSWORD}"/>
+        <connectionManager maxPoolSize="10" minPoolSize="1"/>
+    </dataSource>
+
+    <library id="PostgresLib">
+        <fileset dir="${server.config.dir}/lib/postgres" includes="*.jar"/>
+    </library>
+
+    <!-- MicroProfile Telemetry: export to console by default -->
+    <mpTelemetry>
+        <source>message</source>
+    </mpTelemetry>
+
+    <logging consoleLogLevel="INFO"/>
+
+    <variable name="http.port"    defaultValue="9080"/>
+    <variable name="https.port"   defaultValue="9443"/>
+    <variable name="env.DB_HOST"  defaultValue="localhost"/>
+    <variable name="env.DB_PORT"  defaultValue="5432"/>
+    <variable name="env.DB_NAME"  defaultValue="guessdb"/>
+    <variable name="env.DB_USER"  defaultValue="guessuser"/>
+    <variable name="env.DB_PASSWORD" defaultValue="guesspass"/>
+
+</server>

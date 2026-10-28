@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="Guess the Number with Duke">
+
+    <featureManager>
+        <platform>jakartaee-11.0</platform>
+        <platform>microProfile-7.1</platform>
+        <feature>restfulWS</feature>
+        <feature>jsonb</feature>
+        <feature>cdi</feature>
+        <feature>servlet</feature>
+        <feature>persistence</feature>
+        <feature>jdbc</feature>
+        <feature>mpOpenAPI</feature>
+        <feature>mpTelemetry</feature>
+        <feature>mpHealth</feature>
+    </featureManager>
+
+    <variable name="http.port" defaultValue="9080"/>
+    <variable name="https.port" defaultValue="9443"/>
+
+    <!-- The defaults match compose.yaml, so a fresh clone runs with no setup. Each one can
+         be overridden by an environment variable of the same name. -->
+    <variable name="DB_HOST" defaultValue="localhost"/>
+    <variable name="DB_PORT" defaultValue="5433"/>
+    <variable name="DB_NAME" defaultValue="guessdb"/>
+    <variable name="DB_USER" defaultValue="guess"/>
+    <variable name="DB_PASSWORD" defaultValue="guess"/>
+
+    <httpEndpoint id="defaultHttpEndpoint" host="localhost"
+                  httpPort="${http.port}" httpsPort="${https.port}"/>
+
+    <library id="postgresqlDriver">
+        <fileset dir="${server.config.dir}/lib/postgresql" includes="*.jar"/>
+    </library>
+
+    <dataSource id="leaderboardDataSource" jndiName="jdbc/leaderboard">
+        <jdbcDriver libraryRef="postgresqlDriver"/>
+        <properties.postgresql serverName="${DB_HOST}" portNumber="${DB_PORT}" databaseName="${DB_NAME}"
+                               user="${DB_USER}" password="${DB_PASSWORD}"/>
+    </dataSource>
+
+    <!-- Application and OpenTelemetry messages reach console.log at INFO, which is where
+         the exported telemetry shows up. -->
+    <logging consoleLogLevel="INFO" consoleFormat="simple" messageFormat="simple"/>
+
+    <applicationManager autoExpand="true"/>
+
+    <webApplication id="jakarta-ee-demo-copilot-cli-sonnet-5-5_1" location="jakarta-ee-demo-copilot-cli-sonnet-5-5_1.war" contextRoot="/"/>
+</server>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>jakarta-ee-demo-claude-code-opus-5_2</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+    <name>Guess the Number with Duke</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>25</maven.compiler.release>
+
+        <jakartaee.version>11.0.0</jakartaee.version>
+        <jakarta.data.version>1.0.1</jakarta.data.version>
+        <microprofile.version>7.1</microprofile.version>
+
+        <liberty.runtime.version>26.0.0.10</liberty.runtime.version>
+        <liberty-maven-plugin.version>3.12.4</liberty-maven-plugin.version>
+        <liberty.serverName>dukeGuessServer</liberty.serverName>
+
+        <postgresql.version>42.7.14</postgresql.version>
+        <postgres.image>postgres:18.6</postgres.image>
+
+        <junit.version>6.1.3</junit.version>
+        <testcontainers.version>1.21.4</testcontainers.version>
+        <parsson.version>1.1.9</parsson.version>
+
+        <maven-war-plugin.version>3.5.1</maven-war-plugin.version>
+        <maven-surefire-plugin.version>3.6.1</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.6.1</maven-failsafe-plugin.version>
+
+        <!-- The port the integration tests drive. Keep it in step with the http.port
+             variable in server.xml, which is what the server actually listens on. -->
+        <http.port>9081</http.port>
+
+        <!-- Liberty copies the JDBC driver here. This is a build-time path, so it cannot
+             use ${server.config.dir}, which only has a meaning inside a running server. -->
+        <liberty.driver.dir>${project.build.directory}/liberty/wlp/usr/servers/${liberty.serverName}/lib/postgresql</liberty.driver.dir>
+    </properties>
+
+    <dependencies>
+        <!-- Jakarta EE 11 Web Profile: REST, CDI, Persistence, JSON Binding, Servlet, Validation. -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>${jakartaee.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Jakarta Data is part of the Jakarta EE 11 Platform rather than the Web Profile,
+             so it comes in on its own. Liberty's data-1.0 feature implements it. -->
+        <dependency>
+            <groupId>jakarta.data</groupId>
+            <artifactId>jakarta.data-api</artifactId>
+            <version>${jakarta.data.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- MicroProfile 7.1: Config, OpenAPI, and Telemetry, which brings the
+             OpenTelemetry API and @WithSpan at the versions the specification pins. -->
+        <dependency>
+            <groupId>org.eclipse.microprofile</groupId>
+            <artifactId>microprofile</artifactId>
+            <version>${microprofile.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Copied into the Liberty server's shared library rather than into the WAR. -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- A Jakarta JSON Processing implementation, so the integration tests read API
+             responses through the same JSON API the application is written against. -->
+        <dependency>
+            <groupId>org.eclipse.parsson</groupId>
+            <artifactId>parsson</artifactId>
+            <version>${parsson.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>jakarta-ee-demo-claude-code-opus-5_2</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>io.openliberty.tools</groupId>
+                <artifactId>liberty-maven-plugin</artifactId>
+                <version>${liberty-maven-plugin.version}</version>
+                <configuration>
+                    <serverName>${liberty.serverName}</serverName>
+                    <runtimeArtifact>
+                        <groupId>io.openliberty</groupId>
+                        <artifactId>openliberty-runtime</artifactId>
+                        <version>${liberty.runtime.version}</version>
+                        <type>zip</type>
+                    </runtimeArtifact>
+                    <copyDependencies>
+                        <dependencyGroup>
+                            <location>${liberty.driver.dir}</location>
+                            <dependency>
+                                <groupId>org.postgresql</groupId>
+                                <artifactId>postgresql</artifactId>
+                                <version>${postgresql.version}</version>
+                            </dependency>
+                        </dependencyGroup>
+                    </copyDependencies>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install-server-and-app</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>create</goal>
+                            <goal>install-feature</goal>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <liberty.installDirectory>${project.build.directory}/liberty/wlp</liberty.installDirectory>
+                        <liberty.serverName>${liberty.serverName}</liberty.serverName>
+                        <app.http.port>${http.port}</app.http.port>
+                        <postgres.image>${postgres.image}</postgres.image>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

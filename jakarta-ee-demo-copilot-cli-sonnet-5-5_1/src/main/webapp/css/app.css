@@ -1,0 +1,308 @@
+:root {
+    --ink: #11161d;
+    --ink-soft: #3c4654;
+    --page: #eef2f7;
+    --card: #ffffff;
+    --accent: #0b5ed7;
+    --accent-ink: #ffffff;
+    --accent-dark: #083c8c;
+    --good: #0f6b3f;
+    --bad: #93102a;
+    --rule: #c8d2e0;
+    --stage-height: 290px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0 1rem 3rem;
+    background: var(--page);
+    color: var(--ink);
+    font: 1rem/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+main {
+    max-width: 34rem;
+    margin: 0 auto;
+}
+
+.site-header {
+    max-width: 34rem;
+    margin: 0 auto;
+    padding: 1.75rem 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--rule);
+}
+
+.site-header h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    letter-spacing: -0.01em;
+}
+
+.nav-link,
+.site-footer a {
+    color: var(--accent-dark);
+    font-weight: 600;
+}
+
+.nav-link:focus-visible,
+.site-footer a:focus-visible,
+.button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: var(--stage-height);
+    margin: 1.5rem 0 0.5rem;
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 1rem;
+}
+
+/* All poses share one grid cell, so swapping which is visible never shifts the layout. */
+.duke {
+    display: grid;
+    height: calc(var(--stage-height) - 2rem);
+    transform-origin: 50% 100%;
+}
+
+.duke-pose {
+    grid-area: 1 / 1;
+    height: 100%;
+    width: auto;
+    justify-self: center;
+}
+
+.duke-pose--wave-a,
+.duke-pose--wave-b {
+    opacity: 0;
+}
+
+.duke--celebrating {
+    animation: duke-jumps 1.5s ease-in-out 1;
+}
+
+.duke--celebrating .duke-pose--resting {
+    animation: pose-resting 1.5s step-end 1;
+}
+
+.duke--celebrating .duke-pose--wave-a {
+    animation: pose-wave-a 1.5s step-end 1;
+}
+
+.duke--celebrating .duke-pose--wave-b {
+    animation: pose-wave-b 1.5s step-end 1;
+}
+
+/* The arm swaps between two wave frames; the last step returns to the resting pose. */
+@keyframes pose-resting {
+    0%  { opacity: 0; }
+    95% { opacity: 1; }
+}
+
+@keyframes pose-wave-a {
+    0%  { opacity: 1; }
+    20% { opacity: 0; }
+    40% { opacity: 1; }
+    60% { opacity: 0; }
+    80% { opacity: 1; }
+    95% { opacity: 0; }
+}
+
+@keyframes pose-wave-b {
+    0%  { opacity: 0; }
+    20% { opacity: 1; }
+    40% { opacity: 0; }
+    60% { opacity: 1; }
+    80% { opacity: 0; }
+}
+
+/* Three hops that settle back in the resting pose, per FR-10. */
+@keyframes duke-jumps {
+    0%   { transform: translateY(0) rotate(0deg); }
+    15%  { transform: translateY(-14%) rotate(-3deg); }
+    30%  { transform: translateY(0) rotate(0deg); }
+    45%  { transform: translateY(-11%) rotate(3deg); }
+    60%  { transform: translateY(0) rotate(0deg); }
+    75%  { transform: translateY(-7%) rotate(-2deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .duke--celebrating,
+    .duke--celebrating .duke-pose {
+        animation: none;
+    }
+}
+
+.message {
+    margin: 1rem 0;
+    padding: 0.85rem 1rem;
+    background: var(--card);
+    border-left: 5px solid var(--accent);
+    border-radius: 0.5rem;
+    font-size: 1.05rem;
+    color: var(--ink);
+}
+
+.message--win {
+    border-left-color: var(--good);
+}
+
+.message--lose,
+.message--error {
+    border-left-color: var(--bad);
+}
+
+.guess-form,
+.score-form {
+    margin: 1.25rem 0;
+}
+
+.guess-label,
+.score-label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+}
+
+.guess-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.guess-input,
+.name-input {
+    flex: 1 1 8rem;
+    min-width: 0;
+    padding: 0.6rem 0.7rem;
+    font-size: 1.1rem;
+    color: var(--ink);
+    background: var(--card);
+    border: 2px solid var(--rule);
+    border-radius: 0.5rem;
+}
+
+.guess-input {
+    max-width: 7rem;
+}
+
+.button {
+    padding: 0.6rem 1.1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--card);
+    border: 2px solid var(--accent-dark);
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.button--primary {
+    color: var(--accent-ink);
+    background: var(--accent-dark);
+}
+
+.button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.counters {
+    margin: 0.25rem 0 0;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.score-heading {
+    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+}
+
+.score-form {
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 0.75rem;
+}
+
+.score-message {
+    margin: 0.6rem 0 0;
+    min-height: 1.6rem;
+    color: var(--ink-soft);
+}
+
+.actions {
+    margin-top: 1.5rem;
+}
+
+.leaderboard {
+    width: 100%;
+    margin-top: 1.25rem;
+    background: var(--card);
+    border-collapse: collapse;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.leaderboard th,
+.leaderboard td {
+    padding: 0.65rem 0.9rem;
+    text-align: left;
+    border-bottom: 1px solid var(--rule);
+}
+
+.leaderboard th {
+    background: #dde5f0;
+    color: var(--ink);
+}
+
+.leaderboard td:first-child,
+.leaderboard td:last-child {
+    font-variant-numeric: tabular-nums;
+}
+
+.empty {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    background: var(--card);
+    border: 1px dashed var(--rule);
+    border-radius: 0.75rem;
+    color: var(--ink-soft);
+}
+
+.site-footer {
+    max-width: 34rem;
+    margin: 2.5rem auto 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--rule);
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}

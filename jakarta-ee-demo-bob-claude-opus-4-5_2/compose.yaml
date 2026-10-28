@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: guessdb
+      POSTGRES_USER: guessuser
+      POSTGRES_PASSWORD: guesspass
+    ports:
+      - "5432:5432"
+    volumes:
+      # PostgreSQL 18 changed the default data directory layout:
+      # mount at /var/lib/postgresql so it can use a versioned subdirectory.
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U guessuser -d guessdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:

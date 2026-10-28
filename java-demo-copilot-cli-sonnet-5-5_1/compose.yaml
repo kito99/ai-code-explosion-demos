@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:18.1
+    container_name: java-demo-copilot-cli-sonnet-5-5_1-db
+    environment:
+      POSTGRES_DB: dukedb
+      POSTGRES_USER: duke
+      POSTGRES_PASSWORD: duke
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U duke -d dukedb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      # Postgres 18 keeps its data in a version subdirectory, so the mount sits one level up.
+      - duke-pgdata:/var/lib/postgresql
+
+volumes:
+  duke-pgdata:

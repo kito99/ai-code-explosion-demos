@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="icon" href="img/duke-resting.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="page">
+    <header class="page__header">
+        <h1>Guess the Number with Duke</h1>
+        <nav aria-label="Main"><a class="link" href="leaderboard.html">See the leaderboard</a></nav>
+    </header>
+
+    <main class="card">
+        <div class="stage" id="duke-stage" data-state="playing">
+            <div class="stage__figure">
+                <img class="stage__pose stage__pose--thinking" src="img/duke-thinking.svg"
+                     alt="Duke, the Java mascot, thinking of a number">
+                <img class="stage__pose stage__pose--resting" src="img/duke-resting.svg" alt="" aria-hidden="true">
+                <img class="stage__pose stage__pose--waving" src="img/duke-waving.svg" alt="" aria-hidden="true">
+            </div>
+        </div>
+
+        <p class="lede">Duke is thinking of a whole number from 1 to 10. You get five guesses.</p>
+
+        <form class="guess-form" id="guess-form" novalidate>
+            <label class="guess-form__label" for="guess">Your guess</label>
+            <input class="guess-form__input" id="guess" name="guess" type="number" inputmode="numeric"
+                   min="1" max="10" step="1" autocomplete="off" required>
+            <button class="button button--primary" type="submit" id="guess-button">Guess</button>
+        </form>
+
+        <p class="message" id="message" role="status" aria-live="polite"></p>
+
+        <p class="tally" id="tally"></p>
+
+        <form class="score-form" id="score-form" hidden novalidate>
+            <label class="score-form__label" for="player-name">Put your win on the leaderboard</label>
+            <input class="score-form__input" id="player-name" name="name" type="text"
+                   autocomplete="off" placeholder="Your name" required>
+            <button class="button button--primary" type="submit">Post my score</button>
+            <p class="message message--inline" id="score-message" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="actions">
+            <button class="button" type="button" id="play-again">Play again</button>
+        </div>
+    </main>
+
+    <footer class="page__footer">
+        <p>Duke artwork from the <a class="link"
+            href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.</p>
+    </footer>
+</div>
+<script src="js/game.js"></script>
+</body>
+</html>

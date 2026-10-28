@@ -1,0 +1,29 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - heading "Guess the Number with Duke" [level=1] [ref=e4]
+    - link "Leaderboard" [ref=e5] [cursor=pointer]:
+      - /url: leaderboard.html
+  - main [ref=e6]:
+    - img "Duke, thinking of a number" [ref=e8]
+    - status [ref=e9]: Starting a game…
+    - paragraph [ref=e10]:
+      - generic [ref=e11]:
+        - text: "Guesses made:"
+        - strong [ref=e12]: "0"
+      - generic [ref=e13]:
+        - text: "Guesses left:"
+        - strong [ref=e14]: "5"
+    - generic [ref=e15]:
+      - generic [ref=e16]: Your guess
+      - spinbutton "Your guess" [active] [ref=e17]
+      - button "Guess" [ref=e18] [cursor=pointer]
+    - paragraph [ref=e19]:
+      - button "Play again" [ref=e20] [cursor=pointer]
+      - link "See the leaderboard" [ref=e21] [cursor=pointer]:
+        - /url: leaderboard.html
+  - contentinfo [ref=e22]:
+    - paragraph [ref=e23]:
+      - text: Duke is from the
+      - link "OpenJDK Duke project" [ref=e24] [cursor=pointer]:
+        - /url: https://github.com/openjdk/duke
+      - text: .

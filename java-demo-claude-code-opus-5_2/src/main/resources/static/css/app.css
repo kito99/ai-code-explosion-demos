@@ -1,0 +1,335 @@
+:root {
+    --ink: #16212e;
+    --ink-soft: #46586b;
+    --paper: #ffffff;
+    --backdrop: #e8eef5;
+    --java-blue: #0f5181;
+    --duke-red: #a50d3e;
+    --good: #1a6b3c;
+    --edge: #c7d4e2;
+    --focus: #0b3d61;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* The flex forms below set a display, which would otherwise win over the hidden attribute. */
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(180deg, var(--backdrop), #f7fafd 60%);
+    color: var(--ink);
+    font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+    min-height: 100vh;
+}
+
+.page {
+    margin: 0 auto;
+    max-width: 44rem;
+    padding: 2rem 1.25rem 3rem;
+}
+
+.page__header {
+    align-items: baseline;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page__header h1 {
+    font-size: 1.9rem;
+    margin: 0;
+}
+
+.page__footer {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.card {
+    background: var(--paper);
+    border: 1px solid var(--edge);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(22, 33, 46, 0.08);
+    padding: 1.75rem;
+    text-align: center;
+}
+
+.card--board {
+    text-align: left;
+}
+
+.lede {
+    color: var(--ink-soft);
+    margin: 0 0 1.25rem;
+}
+
+.link {
+    color: var(--java-blue);
+    font-weight: 600;
+}
+
+/* --- Duke --- */
+
+.stage {
+    display: flex;
+    height: 280px;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.stage__figure {
+    height: 100%;
+    position: relative;
+    width: 240px;
+}
+
+.stage__pose {
+    bottom: 0;
+    left: 50%;
+    opacity: 0;
+    position: absolute;
+    transform: translateX(-50%);
+}
+
+/* Each pose is drawn at its own scale in the source artwork, so the heights below are
+   what make Duke the same size whichever pose is showing. */
+/* The thinking pose is a half-body vignette rather than a standing figure, so it sits
+   centred in the stage instead of on the floor the other two share. */
+.stage__pose--thinking {
+    bottom: 14%;
+    height: 68%;
+}
+
+.stage__pose--resting {
+    height: 76%;
+}
+
+.stage__pose--waving {
+    height: 97%;
+}
+
+.stage[data-state="playing"] .stage__pose--thinking,
+.stage[data-state="lost"] .stage__pose--resting,
+.stage[data-state="won"] .stage__pose--resting {
+    opacity: 1;
+}
+
+/* The win: three springs and four waves over 1.5 seconds, played once, ending with Duke
+   back on his feet with his arm down. */
+.stage[data-state="won"] .stage__figure {
+    animation: duke-jump 1.5s ease-in-out 1 both;
+}
+
+.stage[data-state="won"] .stage__pose--waving {
+    animation: duke-wave-arm-up 1.5s steps(1, end) 1 both;
+}
+
+.stage[data-state="won"] .stage__pose--resting {
+    animation: duke-wave-arm-down 1.5s steps(1, end) 1 both;
+}
+
+@keyframes duke-jump {
+    0%, 32%, 64%, 100% { transform: translateY(0); }
+    16% { transform: translateY(-18%); }
+    48% { transform: translateY(-13%); }
+    80% { transform: translateY(-8%); }
+}
+
+@keyframes duke-wave-arm-up {
+    0%, 25%, 50%, 75% { opacity: 1; }
+    12.5%, 37.5%, 62.5%, 87.5%, 100% { opacity: 0; }
+}
+
+@keyframes duke-wave-arm-down {
+    0%, 25%, 50%, 75% { opacity: 0; }
+    12.5%, 37.5%, 62.5%, 87.5%, 100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stage[data-state="won"] .stage__figure,
+    .stage[data-state="won"] .stage__pose--waving,
+    .stage[data-state="won"] .stage__pose--resting {
+        animation: none;
+    }
+
+    .stage[data-state="won"] .stage__pose--waving {
+        opacity: 0;
+    }
+}
+
+/* --- Forms --- */
+
+.guess-form,
+.score-form {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+    margin: 0 0 1rem;
+}
+
+.score-form {
+    border-top: 1px solid var(--edge);
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+}
+
+.guess-form__label,
+.score-form__label {
+    font-weight: 600;
+}
+
+.guess-form__input,
+.score-form__input {
+    background: var(--paper);
+    border: 2px solid var(--edge);
+    border-radius: 8px;
+    color: var(--ink);
+    font-size: 1.1rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.guess-form__input {
+    width: 5.5rem;
+}
+
+.score-form__input {
+    width: 12rem;
+}
+
+.guess-form__input:focus-visible,
+.score-form__input:focus-visible,
+.button:focus-visible,
+.link:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+}
+
+.button {
+    background: var(--paper);
+    border: 2px solid var(--java-blue);
+    border-radius: 8px;
+    color: var(--java-blue);
+    cursor: pointer;
+    display: inline-block;
+    font: inherit;
+    font-weight: 600;
+    padding: 0.5rem 1.1rem;
+    text-decoration: none;
+}
+
+.button:hover {
+    background: #eaf2f9;
+}
+
+.button--primary {
+    background: var(--java-blue);
+    color: var(--paper);
+}
+
+.button--primary:hover {
+    background: #0c4169;
+}
+
+.button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.actions {
+    margin-top: 1.25rem;
+}
+
+/* --- Messages --- */
+
+.message {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem;
+    min-height: 1.6rem;
+}
+
+.message--inline {
+    flex-basis: 100%;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.message[data-tone="win"] {
+    color: var(--good);
+    font-weight: 700;
+}
+
+.message[data-tone="lose"] {
+    color: var(--duke-red);
+    font-weight: 700;
+}
+
+.message[data-tone="nudge"] {
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.message[data-tone="problem"] {
+    color: var(--duke-red);
+}
+
+.tally {
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* --- Leaderboard --- */
+
+.board {
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+.board th,
+.board td {
+    border-bottom: 1px solid var(--edge);
+    padding: 0.6rem 0.5rem;
+    text-align: left;
+}
+
+.board th {
+    color: var(--ink-soft);
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.board td:first-child {
+    color: var(--java-blue);
+    font-weight: 700;
+    width: 4rem;
+}
+
+.board td:last-child,
+.board th:last-child {
+    text-align: right;
+}
+
+.visually-hidden {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}

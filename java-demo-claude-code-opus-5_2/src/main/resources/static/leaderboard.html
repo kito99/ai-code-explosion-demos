@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leaderboard &middot; Guess the Number with Duke</title>
+    <link rel="icon" href="img/duke-resting.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<div class="page">
+    <header class="page__header">
+        <h1>Leaderboard</h1>
+        <nav aria-label="Main"><a class="link" href="index.html">Back to the game</a></nav>
+    </header>
+
+    <main class="card card--board">
+        <p class="lede">The best wins posted on this server, fewest guesses first.
+            Reload to see what everyone else has posted.</p>
+
+        <p class="message" id="board-message" role="status" aria-live="polite">Loading the standings&hellip;</p>
+
+        <table class="board" id="board" hidden>
+            <caption class="visually-hidden">Top results, fewest guesses first</caption>
+            <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Name</th>
+                <th scope="col">Guesses</th>
+            </tr>
+            </thead>
+            <tbody id="board-rows"></tbody>
+        </table>
+
+        <div class="actions">
+            <a class="button button--primary" href="index.html">Play a round</a>
+        </div>
+    </main>
+</div>
+<script src="js/leaderboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<main>
+    <nav><a href="/leaderboard.html">Leaderboard</a></nav>
+    <h1>Guess the Number with Duke</h1>
+
+    <img id="duke" class="duke" src="/img/duke-standing.png" alt="Duke, the Java mascot, thinking of a number">
+
+    <p id="message" class="message" role="status" aria-live="polite">Starting a game…</p>
+    <p id="counts" class="counts" aria-live="polite"></p>
+
+    <form id="guess-form" novalidate>
+        <label for="guess">Your guess (1 to 10)</label>
+        <input id="guess" name="guess" type="text" inputmode="numeric" autocomplete="off" autofocus>
+        <button type="submit" id="guess-button">Guess</button>
+    </form>
+
+    <form id="score-form" hidden novalidate>
+        <label for="name">Your name for the leaderboard</label>
+        <input id="name" name="name" type="text" autocomplete="off" maxlength="60">
+        <button type="submit">Post my score</button>
+    </form>
+
+    <button type="button" id="new-game">Play again</button>
+</main>
+<script src="/js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+[    7127ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:9081/api/games/current/guesses:0
+[    7412ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:9081/api/games/current/guesses:0
+[    7710ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:9081/api/games/current/guesses:0

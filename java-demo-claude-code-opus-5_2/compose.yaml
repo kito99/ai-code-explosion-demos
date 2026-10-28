@@ -1,0 +1,24 @@
+name: java-demo-claude-code-opus-5_2
+
+services:
+  db:
+    image: postgres:18
+    container_name: java-demo-claude-code-opus-5_2-db
+    environment:
+      POSTGRES_DB: dukedb
+      POSTGRES_USER: duke
+      POSTGRES_PASSWORD: duke
+    ports:
+      # 5434 on the host keeps this demo clear of the other demos in this repository.
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U duke -d dukedb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    volumes:
+      # Postgres 18 keeps its data in a versioned subdirectory, so the mount goes one level up.
+      - duke-pgdata:/var/lib/postgresql
+
+volumes:
+  duke-pgdata:

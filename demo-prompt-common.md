@@ -57,6 +57,7 @@ When you are finished, copy the following into the new folder, so we can keep
 track of the exact versions used for the app:
 
 * `BRD.md`
+* `AGENTS.md`
 * The prompt file you were given
 * This file
 

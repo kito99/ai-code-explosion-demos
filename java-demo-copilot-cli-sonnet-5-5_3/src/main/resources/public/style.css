@@ -1,0 +1,88 @@
+:root {
+  --background: #f4f7fb;
+  --card: #ffffff;
+  --text: #1b2733;
+  --accent: #1a5fb4;
+  --accent-text: #ffffff;
+  --error: #a4161a;
+  --border: #8a99ab;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem;
+  background: var(--background);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 1.1rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 34rem;
+  background: var(--card);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  text-align: center;
+  align-self: flex-start;
+}
+
+h1 { margin-top: 0; font-size: 1.7rem; }
+a { color: var(--accent); }
+
+.duke-stage { height: 15rem; display: flex; align-items: flex-end; justify-content: center; }
+.duke { height: 14rem; width: auto; transform-origin: bottom center; }
+.duke.celebrating { animation: happy-jump 0.5s ease-in-out 3; }
+
+@keyframes happy-jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-1.2rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .duke.celebrating { animation: none; }
+}
+
+.message { min-height: 3.2rem; font-weight: 600; }
+.message.error { color: var(--error); }
+
+form { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; align-items: center; margin: 1rem 0; }
+form[hidden] { display: none; }
+label { flex-basis: 100%; font-weight: 600; }
+
+input {
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--border);
+  border-radius: 0.5rem;
+  min-width: 0;
+  width: 12rem;
+}
+
+button {
+  font: inherit;
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: var(--accent-text);
+  cursor: pointer;
+}
+button.secondary { background: var(--card); color: var(--accent); }
+button:disabled { opacity: 0.55; cursor: not-allowed; }
+:focus-visible { outline: 3px solid #ff9800; outline-offset: 2px; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: 0.5rem; border-bottom: 1px solid var(--border); text-align: left; }
+th:first-child, td:first-child, th:last-child, td:last-child { text-align: center; }
+td:nth-child(2) { overflow-wrap: anywhere; }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}

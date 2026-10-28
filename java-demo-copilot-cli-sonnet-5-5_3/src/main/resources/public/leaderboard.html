@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard – Guess the Number with Duke</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Leaderboard</h1>
+    <nav><a href="/">Back to the game</a></nav>
+
+    <p id="empty-message" class="message" hidden>No scores have been posted so far. Win a game and be the first!</p>
+    <p id="error-message" class="message error" role="alert" hidden></p>
+
+    <table id="leaderboard-table" hidden>
+      <caption class="visually-hidden">Top 10 results, fewest guesses first</caption>
+      <thead>
+        <tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">Guesses</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+  <script src="/leaderboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Guess the Number with Duke</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f0f4ff;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #1a1a2e;
+        }
+
+        nav {
+            margin-bottom: 1.5rem;
+        }
+
+        nav a {
+            color: #3a6fd8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        nav a:hover { text-decoration: underline; }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        /* Duke figure */
+        #duke-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        #duke-img {
+            width: 140px;
+            height: auto;
+        }
+
+        #duke-img.celebrate {
+            animation: bounce 1.5s ease forwards;
+        }
+
+        @keyframes bounce {
+            0%   { transform: translateY(0); }
+            20%  { transform: translateY(-28px); }
+            40%  { transform: translateY(0); }
+            60%  { transform: translateY(-18px); }
+            80%  { transform: translateY(0); }
+            90%  { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+
+        /* Feedback banner */
+        .feedback {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            background: #e8f0fe;
+            color: #1a1a2e;
+        }
+
+        .feedback.won  { background: #d4edda; color: #155724; }
+        .feedback.lost { background: #f8d7da; color: #721c24; }
+        .feedback.invalid { background: #fff3cd; color: #856404; }
+
+        /* Counters */
+        .counters {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .counters span strong { color: #1a1a2e; }
+
+        /* Guess form */
+        .guess-form {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .guess-form input[type="number"] {
+            width: 90px;
+            padding: 0.55rem 0.8rem;
+            font-size: 1.1rem;
+            border: 2px solid #b0c0e8;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .guess-form input[type="number"]:focus {
+            outline: none;
+            border-color: #3a6fd8;
+        }
+
+        button {
+            padding: 0.55rem 1.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: filter 0.15s;
+        }
+
+        button:hover { filter: brightness(0.92); }
+
+        .btn-primary  { background: #3a6fd8; color: white; }
+        .btn-secondary { background: #e2e8f8; color: #1a1a2e; }
+
+        /* Win panel */
+        .win-panel {
+            background: #f0fff4;
+            border: 2px solid #6fcf97;
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .win-panel p { margin-bottom: 0.8rem; font-size: 0.95rem; }
+
+        .win-panel .input-row {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .win-panel input[type="text"] {
+            padding: 0.5rem 0.8rem;
+            font-size: 1rem;
+            border: 2px solid #6fcf97;
+            border-radius: 0.5rem;
+            width: 200px;
+        }
+
+        .win-panel input[type="text"]:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+
+        .error-msg {
+            color: #c0392b;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .play-again-form { margin-top: 0.5rem; }
+    </style>
+</head>
+<body>
+
+<h1>Guess the Number!</h1>
+
+<nav><a th:href="@{/leaderboard}">🏆 Leaderboard</a></nav>
+
+<div class="card">
+
+    <!-- Duke image -->
+    <div id="duke-container">
+        <img id="duke-img"
+             th:src="@{/images/duke.png}"
+             alt="Duke, the Java mascot"
+             th:classappend="${game.outcome != null and game.outcome.name() == 'CORRECT'} ? 'celebrate' : ''"/>
+    </div>
+
+    <!-- Feedback -->
+    <div th:with="stateStr=${game.state.name()}, outcomeStr=${game.outcome != null ? game.outcome.name() : ''}"
+         th:classappend="${stateStr == 'WON'} ? 'won' : (${stateStr == 'LOST'} ? 'lost' : (${outcomeStr == 'INVALID'} ? 'invalid' : ''))"
+         class="feedback"
+         th:text="${game.feedback}">
+        I'm thinking of a number between 1 and 10. Can you guess it?
+    </div>
+
+    <!-- Counters — shown while active or after result -->
+    <div class="counters" th:if="${game.guessCount > 0 or game.state.name() == 'ACTIVE'}">
+        <span>Guesses made: <strong th:text="${game.guessCount}">0</strong></span>
+        <span>Guesses left: <strong th:text="${game.guessesLeft}">5</strong></span>
+    </div>
+
+    <!-- Guess input — only while active -->
+    <form th:if="${game.state.name() == 'ACTIVE'}"
+          class="guess-form"
+          method="post"
+          th:action="@{/guess}">
+        <input type="number" name="guess" min="1" max="10"
+               placeholder="1–10"
+               autofocus
+               aria-label="Your guess"/>
+        <button type="submit" class="btn-primary">Guess!</button>
+    </form>
+
+    <!-- Win panel: enter name to post score -->
+    <div th:if="${game.state.name() == 'WON'}" class="win-panel">
+        <p>Enter your name to post your score to the leaderboard, or start a new game.</p>
+        <form method="post" th:action="@{/post-score}">
+            <div class="input-row">
+                <input type="text" name="playerName" maxlength="30"
+                       placeholder="Your name"
+                       autofocus
+                       aria-label="Player name"/>
+                <button type="submit" class="btn-primary">Post Score</button>
+            </div>
+            <p th:if="${nameError}" class="error-msg" th:text="${nameError}"></p>
+        </form>
+        <form method="post" th:action="@{/new-game}" class="play-again-form">
+            <button type="submit" class="btn-secondary">Play Again (no score)</button>
+        </form>
+    </div>
+
+    <!-- Play again after a loss -->
+    <form th:if="${game.state.name() == 'LOST'}"
+          method="post"
+          th:action="@{/new-game}"
+          class="play-again-form">
+        <button type="submit" class="btn-primary">Play Again</button>
+    </form>
+
+    <!-- Always-available new-game during active play -->
+    <form th:if="${game.state.name() == 'ACTIVE'}"
+          method="post"
+          th:action="@{/new-game}"
+          style="margin-top:0.5rem">
+        <button type="submit" class="btn-secondary">New Game</button>
+    </form>
+
+</div>
+
+<script>
+    // Re-trigger the bounce animation if the page is served with CORRECT outcome
+    // (needed for form-post redirects that skip browser animation replay)
+    document.addEventListener('DOMContentLoaded', () => {
+        const dukeImg = document.getElementById('duke-img');
+        if (dukeImg && dukeImg.classList.contains('celebrate')) {
+            dukeImg.classList.remove('celebrate');
+            void dukeImg.offsetWidth; // force reflow
+            dukeImg.classList.add('celebrate');
+        }
+    });
+</script>
+
+</body>
+</html>

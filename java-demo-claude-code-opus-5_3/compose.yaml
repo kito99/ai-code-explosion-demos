@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:18
+    container_name: java-demo-claude-code-opus-5_3-db
+    environment:
+      POSTGRES_DB: guessdb
+      POSTGRES_USER: guessuser
+      POSTGRES_PASSWORD: guesspass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:

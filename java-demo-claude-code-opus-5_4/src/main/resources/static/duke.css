@@ -1,0 +1,205 @@
+:root {
+  --ink: #15202b;
+  --ink-soft: #3d4b59;
+  --paper: #fdfaf4;
+  --card: #ffffff;
+  --java-red: #910028;
+  --java-blue: #2f5d8a;
+  --edge: #d8d2c6;
+  --focus: #0b5fff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 2rem 1rem 3rem;
+  background: var(--paper);
+  color: var(--ink);
+  font: 1rem/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.page { max-width: 54rem; margin: 0 auto; }
+
+.page__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 2px solid var(--edge);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+h1 { font-size: 1.7rem; margin: 0; letter-spacing: -0.01em; }
+
+.link { color: var(--java-blue); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.link:hover { color: var(--java-red); }
+
+.stage {
+  display: grid;
+  grid-template-columns: minmax(10rem, 16rem) minmax(16rem, 1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+@media (max-width: 42rem) {
+  .stage { grid-template-columns: 1fr; justify-items: center; }
+  .play { width: 100%; }
+}
+
+/* --- Duke --- */
+
+.duke {
+  display: grid;
+  place-items: end center;
+  height: 17rem;
+  padding: 0.5rem;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  border-radius: 0.75rem;
+}
+
+.duke__thinking,
+.duke__celebrating {
+  grid-area: 1 / 1;
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+
+.duke__celebrating { display: none; }
+
+.duke--celebrating .duke__thinking { display: none; }
+.duke--celebrating .duke__celebrating { display: block; }
+
+/* Duke springs up and settles back down three times, then holds his resting pose. */
+.duke--celebrating .duke__celebrating { animation: duke-jump 1.5s ease-in-out 1 both; }
+
+.duke-arm {
+  transform-box: view-box;
+  transform-origin: 350px 415px;
+}
+
+.duke--celebrating .duke-arm { animation: duke-wave 0.25s ease-in-out 6 both; }
+
+@keyframes duke-jump {
+  0%, 33.3%, 66.6%, 100% { transform: translateY(0) scaleY(1); }
+  8%, 41.3%, 74.6%       { transform: translateY(-16%) scaleY(1.03); }
+  28%, 61.3%, 94.6%      { transform: translateY(0) scaleY(0.96); }
+}
+
+/* Each swing returns to 0deg, so the last one leaves the arm exactly at rest. */
+@keyframes duke-wave {
+  from, to { rotate: 0deg; }
+  25%      { rotate: -13deg; }
+  75%      { rotate: 11deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .duke--celebrating .duke__celebrating,
+  .duke--celebrating .duke-arm { animation: none; }
+}
+
+/* --- Playing --- */
+
+.play { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.message {
+  margin: 0;
+  min-height: 3.1rem;
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  border-left: 4px solid var(--java-blue);
+  border-radius: 0.5rem;
+  color: var(--ink);
+}
+
+.message--small { min-height: 0; font-size: 0.9rem; margin-top: 0.75rem; }
+.message--small:empty { display: none; }
+
+.message--win { border-left-color: var(--java-red); font-weight: 600; }
+
+.guess-form__label,
+.name-form__label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  color: var(--ink-soft);
+}
+
+.guess-form__row,
+.name-form__row { display: flex; gap: 0.6rem; }
+
+.guess-form__input,
+.name-form__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0.6rem 0.7rem;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--ink-soft);
+  border-radius: 0.4rem;
+}
+
+.guess-form__input { max-width: 7rem; }
+
+.button {
+  padding: 0.6rem 1.1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--ink-soft);
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.button:hover:not(:disabled) { background: #f0ece3; }
+.button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.button--primary { color: var(--card); background: var(--java-red); border-color: var(--java-red); }
+.button--primary:hover:not(:disabled) { background: #6f001e; }
+
+:is(.button, .link, input):focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+#newGameButton { align-self: flex-start; }
+
+.tally { display: flex; gap: 2rem; margin: 0; }
+.tally__item { display: flex; flex-direction: column; }
+.tally dt { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); }
+.tally dd { margin: 0; font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* --- Leaderboard --- */
+
+.board__table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card);
+  border: 1px solid var(--edge);
+  border-radius: 0.5rem;
+}
+
+.board__table caption {
+  text-align: left;
+  padding-bottom: 0.6rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.board__table :is(th, td) {
+  padding: 0.6rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--edge);
+}
+
+.board__table thead th { background: #f3efe6; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.board__table tbody tr:last-child :is(th, td) { border-bottom: none; }
+.board__table :is(td:first-child, td:last-child) { font-variant-numeric: tabular-nums; }

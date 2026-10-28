@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Number with Duke</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="card">
+    <h1>Guess the Number with Duke</h1>
+    <nav><a href="/leaderboard">View the leaderboard</a></nav>
+
+    <div class="duke-stage">
+      <img id="duke" class="duke" src="images/duke-hips.png" alt="Duke, the Java mascot, thinking of a number">
+    </div>
+
+    <p id="message" class="message" role="status" aria-live="polite">Starting a new game…</p>
+
+    <p class="counts">
+      Guesses made: <strong id="guesses-made">0</strong> ·
+      Guesses remaining: <strong id="guesses-remaining">5</strong>
+    </p>
+
+    <form id="guess-form" autocomplete="off">
+      <label for="guess-input">Your guess (1 to 10)</label>
+      <input id="guess-input" name="guess" type="text" inputmode="numeric" maxlength="12">
+      <button type="submit" id="guess-button">Guess</button>
+    </form>
+
+    <form id="score-form" autocomplete="off" hidden>
+      <label for="name-input">Your name (up to 30 characters)</label>
+      <input id="name-input" name="name" type="text" maxlength="60">
+      <button type="submit">Post my score</button>
+    </form>
+
+    <button type="button" id="new-game-button" class="secondary">New game</button>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

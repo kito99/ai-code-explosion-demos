@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard &ndash; Guess the Number with Duke</title>
+  <link rel="icon" href="assets/duke-thinking.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="duke.css">
+</head>
+<body>
+<main class="page">
+  <header class="page__header">
+    <h1>Leaderboard</h1>
+    <a class="link" href="index.html">Back to the game</a>
+  </header>
+
+  <section class="board">
+    <p class="message" id="boardMessage" role="status" aria-live="polite">Loading the best rounds&hellip;</p>
+    <table class="board__table" id="boardTable" hidden>
+      <caption>Best rounds so far, fewest guesses first</caption>
+      <thead>
+        <tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">Guesses</th></tr>
+      </thead>
+      <tbody id="boardBody"></tbody>
+    </table>
+  </section>
+</main>
+<script src="leaderboard.js"></script>
+</body>
+</html>

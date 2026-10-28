@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Leaderboard — Guess the Number with Duke</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: system-ui, sans-serif;
+            background: #f0f4ff;
+            color: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+
+        nav { margin-bottom: 1.5rem; }
+        nav a { color: #3a6fd8; text-decoration: none; font-weight: 600; }
+        nav a:hover { text-decoration: underline; }
+
+        .card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .empty-msg {
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+            padding: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1rem;
+        }
+
+        thead th {
+            text-align: left;
+            padding: 0.6rem 0.8rem;
+            border-bottom: 2px solid #dde3f3;
+            color: #555;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        tbody tr:nth-child(odd) { background: #f8f9ff; }
+
+        tbody td {
+            padding: 0.65rem 0.8rem;
+            border-bottom: 1px solid #eef0f8;
+        }
+
+        .rank { font-weight: 700; color: #3a6fd8; width: 3rem; text-align: center; }
+        .guesses { text-align: center; width: 7rem; }
+
+        .medal-1::before { content: "🥇 "; }
+        .medal-2::before { content: "🥈 "; }
+        .medal-3::before { content: "🥉 "; }
+    </style>
+</head>
+<body>
+
+<h1>🏆 Leaderboard</h1>
+<nav><a th:href="@{/}">← Back to Game</a></nav>
+
+<div class="card">
+
+    <p th:if="${#lists.isEmpty(entries)}" class="empty-msg">
+        No scores have been posted yet. Be the first to win!
+    </p>
+
+    <table th:if="${not #lists.isEmpty(entries)}">
+        <thead>
+        <tr>
+            <th class="rank">Rank</th>
+            <th>Name</th>
+            <th class="guesses">Guesses</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="entry, stat : ${entries}">
+            <td class="rank"
+                th:classappend="${stat.index == 0} ? 'medal-1' : (${stat.index == 1} ? 'medal-2' : (${stat.index == 2} ? 'medal-3' : ''))"
+                th:text="${stat.count}">1</td>
+            <td th:text="${entry.playerName}">Player</td>
+            <td class="guesses" th:text="${entry.guessCount}">1</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

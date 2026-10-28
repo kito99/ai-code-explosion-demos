@@ -24,11 +24,11 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 - Exceptions or Errors should only be caught without rethrowing (i.e. swallowed) when the calling code can properly recover without side-effects
 - Favor unchecked exceptions
 - Use custom exceptions or errors when the type can be a helpful description of the error (e.g. PersistenceException or SyntaxException)
-- Use base exceptions when it makes sense semantically or you need to reuse core logic
+- Use base exceptions when it makes sense semantically, or you need to reuse core logic
 
 # Java
 
-- Use modern Java (25+) syntax and features unless the repository is using an older verison
+- Use modern Java (25+) syntax and features unless the repository is using an older version
 - Use static imports when possible
 - Use the fully qualified package name when referencing a class only when there is another class with the same name. 
 - Use var unless the lack of the type is ambiguous.
@@ -47,13 +47,13 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 
 # Development Instructions
 
-- When writing code, respect DRY, KISS and Law of Demeter; keep Cyclomatic Complexity below 15; do not use magic numbers.
+- When writing code, respect DRY, KISS, and Law of Demeter; keep Cyclomatic Complexity below 15; do not use magic numbers.
 - After completing all code changes, review if project `README.md` needs to abe updated based on your changes, and update if necessary.
 
 
 # Writing Style
 
-- Write AI responses, commit messages, PR descriptions and code comments terse and direct. No preamble, no padding, no recap of what you just did. Headers and tables only when the content genuinely benefits from structure — otherwise prose. Mirror the user's register (casual ↔ formal) rather than defaulting to either extreme.
+- Write AI responses, commit messages, PR descriptions, and code comments terse and direct. No preamble, no padding, no recap of what you just did. Headers and tables only when the content genuinely benefits from structure — otherwise prose. Mirror the user's register (casual ↔ formal) rather than defaulting to either extreme.
 - Be forward-looking, not postmortem. When documenting findings, decisions, or procedures, write them as a reference for the next reader — not a narrative of what just happened. ("X works like Y", not "we tried Y and then found X").
 
 # General Principles
@@ -66,16 +66,15 @@ This file provides guidance for coding agents to work with this monorepo. Each r
 - No redundant comments: don't comment what the code already says (method names, variable names, obvious flow). Only comment *why* something is done when it's non-obvious, or to clarify tricky logic. Never duplicate javadoc in an inline comment. Section markers (e.g. `// --- Lifecycle ---`) are fine in large files.
 - No bug-postmortem comments: incident-specific detail (run numbers, "after we hit X", smoking-gun datapoints, before/after measurements) belongs in the commit message or PR description, not in source comments. Source comments should state the forward-looking *why* (the invariant, constraint, or contract that justifies the code) — not narrate how a past bug was diagnosed. Postmortem detail rots as the codebase evolves; commit history doesn't.
 
-# Assessments, Debugging and Bug Fixes
+# Assessments, Debugging, and Bug Fixes
 
 - When fixing a bug, first write a failing test.
 - State your diagnosis and which file/method you'll change BEFORE writing code. Always wait for confirmation. This also applies to non-trivial new features: describe the approach before implementing.
 - Do not over-apply fixes. Stay within the requested scope.
 
-
 # Self-Review
 
-- When working on a tasl, after completing all code changes, spawn a "Code Reviewer" agent at high effort using a different model and perform a self-review of the full diff before presenting the result. Check for:
+- When working on a task, after completing all code changes, spawn a "Code Reviewer" agent at high effort using a different model and perform a self-review of the full diff before presenting the result. Check for:
   - Violations of the General Principles above
   - Missing edge cases or error handling at system boundaries
   - Naming/style/formatting consistency with surrounding code

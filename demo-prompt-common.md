@@ -3,6 +3,17 @@
 These instructions are the same for every demo in this repository. They add to
 the prompt that sent you here, which supplies the project name prefix to use.
 
+## Existing demos
+
+Build the app from `BRD.md` and the instructions in these prompts alone. Do not
+read or copy from the demos already in this repository, neither their source nor
+their configuration nor their READMEs, so each demo shows what this harness and
+model produce on their own. `AGENTS.md` is the exception, since it carries the
+coding conventions every demo follows.
+
+Reading the names of the existing demo folders is fine, and necessary, to work
+out this demo's own name below.
+
 ## Project name
 
 The name of the project should be `[prefix]-demo-[agent harness]-[model]_xx`,

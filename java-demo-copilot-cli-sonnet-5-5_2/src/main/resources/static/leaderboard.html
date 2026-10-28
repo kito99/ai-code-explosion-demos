@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Leaderboard - Guess the Number with Duke</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Leaderboard</h1>
+    <nav><a href="index.html">Back to the game</a> · <a href="swagger-ui.html">API docs</a></nav>
+  </header>
+
+  <main>
+    <p id="status" class="message" role="status" aria-live="polite">Loading the best results…</p>
+
+    <table id="leaderboard-table" class="hidden">
+      <caption>Top 10 wins, fewest guesses first</caption>
+      <thead>
+        <tr><th scope="col">Rank</th><th scope="col">Name</th><th scope="col">Guesses</th></tr>
+      </thead>
+      <tbody id="leaderboard-body"></tbody>
+    </table>
+  </main>
+
+  <script src="js/leaderboard.js"></script>
+</body>
+</html>

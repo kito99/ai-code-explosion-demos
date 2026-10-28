@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Number with Duke</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Guess the Number with Duke</h1>
+    <nav><a href="leaderboard.html">Leaderboard</a> · <a href="swagger-ui.html">API docs</a></nav>
+  </header>
+
+  <main>
+    <img id="duke" class="duke" src="img/Thinking.svg"
+         alt="Duke, the Java mascot, thinking of a number">
+
+    <p class="intro">Duke is thinking of a number from 1 to 10. You have 5 guesses.</p>
+
+    <p id="counts" class="counts" aria-live="polite">Guesses made: 0 · Guesses remaining: 5</p>
+
+    <form id="guess-form" novalidate>
+      <label for="guess-input">Your guess (1 to 10)</label>
+      <input id="guess-input" type="text" inputmode="numeric" autocomplete="off" maxlength="6">
+      <button type="submit" id="guess-button">Guess</button>
+    </form>
+
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+
+    <form id="name-form" class="hidden" novalidate>
+      <label for="name-input">Your name for the leaderboard</label>
+      <input id="name-input" type="text" autocomplete="off" maxlength="60">
+      <button type="submit" id="name-button">Post my score</button>
+    </form>
+
+    <p id="posted-links" class="hidden">
+      <a href="leaderboard.html">See the leaderboard</a>
+    </p>
+
+    <button type="button" id="new-game-button" class="secondary">Play again</button>
+  </main>
+
+  <script src="js/game.js"></script>
+</body>
+</html>

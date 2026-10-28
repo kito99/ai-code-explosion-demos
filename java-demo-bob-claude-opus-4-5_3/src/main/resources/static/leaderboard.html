@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard — Guess the Number with Duke!</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2.5rem 3rem;
+            max-width: 540px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            margin-bottom: 0.3rem;
+            color: #f0c040;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        thead th {
+            padding: 0.6rem 0.8rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #a0a0c0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        tbody tr {
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: rgba(255,255,255,0.04);
+        }
+
+        tbody td {
+            padding: 0.65rem 0.8rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .rank-1 td:first-child { color: #ffd700; font-weight: 700; }
+        .rank-2 td:first-child { color: #c0c0c0; font-weight: 700; }
+        .rank-3 td:first-child { color: #cd7f32; font-weight: 700; }
+
+        .guess-badge {
+            display: inline-block;
+            background: rgba(240,192,64,0.15);
+            color: #f0c040;
+            border-radius: 20px;
+            padding: 0.15rem 0.6rem;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            padding: 2rem 0;
+            color: #a0a0c0;
+            font-size: 1rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 0.5rem;
+            color: #90c0ff;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+
+        .back-link:hover { text-decoration: underline; }
+
+        .error { color: #ff9090; padding: 1rem 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🏆 Leaderboard</h1>
+    <p class="subtitle">Top 10 winners — fewest guesses wins!</p>
+
+    <div id="board-container">
+        <p class="empty-state">Loading…</p>
+    </div>
+
+    <a href="/" class="back-link">← Back to Game</a>
+</div>
+
+<script>
+    async function loadLeaderboard() {
+        const container = document.getElementById('board-container');
+        try {
+            const res = await fetch('/api/leaderboard');
+            const entries = await res.json();
+
+            if (!Array.isArray(entries) || entries.length === 0) {
+                container.innerHTML = '<p class="empty-state">No scores have been posted yet. Be the first to win!</p>';
+                return;
+            }
+
+            const rows = entries.map(e => {
+                const date = new Date(e.recordedAt).toLocaleDateString(undefined, {
+                    month: 'short', day: 'numeric', year: 'numeric'
+                });
+                return `
+                    <tr class="rank-${e.rank}">
+                        <td>${e.rank}</td>
+                        <td>${escapeHtml(e.playerName)}</td>
+                        <td><span class="guess-badge">${e.guessCount}</span></td>
+                        <td>${date}</td>
+                    </tr>`;
+            }).join('');
+
+            container.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Guesses</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>`;
+        } catch (err) {
+            container.innerHTML = '<p class="error">Failed to load leaderboard. Please try again.</p>';
+        }
+    }
+
+    function escapeHtml(text) {
+        return text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    loadLeaderboard();
+</script>
+</body>
+</html>

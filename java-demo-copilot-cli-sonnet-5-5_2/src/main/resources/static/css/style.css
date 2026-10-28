@@ -1,0 +1,119 @@
+:root {
+  --ink: #1b1b1f;
+  --paper: #fdf8f0;
+  --accent: #0b5cad;
+  --accent-ink: #ffffff;
+  --error: #9b1c1c;
+  --success: #14532d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.5;
+}
+
+header, main {
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 1rem;
+  text-align: center;
+}
+
+h1 { margin: 0.5rem 0; font-size: 1.6rem; }
+
+a { color: var(--accent); }
+
+.duke {
+  display: block;
+  height: 12rem;
+  max-width: 100%;
+  margin: 0 auto 0.5rem;
+  transform-origin: 50% 100%;
+}
+
+/* Three springs of 0.5s each (~1.5s total) with a side-to-side sway; plays once, then rests. */
+.duke.celebrate {
+  animation: duke-jump 0.5s ease-in-out 3;
+}
+
+@keyframes duke-jump {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-1.5rem) rotate(-6deg); }
+  50% { transform: translateY(-2rem) rotate(0deg); }
+  75% { transform: translateY(-1.5rem) rotate(6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .duke.celebrate { animation: none; }
+}
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+label { flex-basis: 100%; font-weight: 600; }
+
+input {
+  font: inherit;
+  padding: 0.5rem 0.75rem;
+  border: 2px solid var(--ink);
+  border-radius: 0.4rem;
+  min-width: 8rem;
+  background: #ffffff;
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border: 2px solid var(--accent);
+  border-radius: 0.4rem;
+  background: var(--accent);
+  color: var(--accent-ink);
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #ffffff;
+  color: var(--accent);
+}
+
+button:disabled, input:disabled { opacity: 0.6; cursor: not-allowed; }
+
+:focus-visible { outline: 3px solid #b45309; outline-offset: 2px; }
+
+.message { min-height: 1.5rem; font-weight: 600; }
+.message.error { color: var(--error); }
+.message.success { color: var(--success); }
+
+.counts { font-size: 1.1rem; }
+
+.hidden { display: none !important; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+caption { padding: 0.5rem; font-weight: 600; }
+
+th, td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #c9c2b6;
+  text-align: left;
+}
+
+th { background: #e8e1d3; }
+td:first-child, td:last-child, th:first-child, th:last-child { text-align: center; }

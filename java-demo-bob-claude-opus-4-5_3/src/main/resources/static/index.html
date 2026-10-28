@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number with Duke!</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e0e0e0;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2.5rem 3rem;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.25rem;
+            color: #f0c040;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Duke figure */
+        #duke-container {
+            position: relative;
+            height: 180px;
+            margin: 0 auto 1.5rem;
+            width: 160px;
+        }
+
+        #duke-img {
+            height: 180px;
+            object-fit: contain;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: bottom 0.1s ease;
+            bottom: 0;
+        }
+
+        /* Jump animation: two frames alternating + bounce */
+        @keyframes duke-jump {
+            0%   { bottom: 0;    }
+            15%  { bottom: 50px; }
+            30%  { bottom: 0;    }
+            45%  { bottom: 40px; }
+            60%  { bottom: 0;    }
+            75%  { bottom: 25px; }
+            90%  { bottom: 0;    }
+            100% { bottom: 0;    }
+        }
+
+        #duke-img.celebrating {
+            animation: duke-jump 1.5s ease forwards;
+        }
+
+        /* Stats bar */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: rgba(255,255,255,0.06);
+            border-radius: 10px;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.85rem;
+        }
+
+        .stats span strong {
+            color: #f0c040;
+            font-size: 1.1rem;
+        }
+
+        /* Feedback */
+        #feedback {
+            min-height: 2rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.4rem;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        #feedback.positive { background: rgba(80,200,120,0.15); color: #80ffaa; }
+        #feedback.negative { background: rgba(255,80,80,0.15);  color: #ff9090; }
+        #feedback.info     { background: rgba(80,140,255,0.15); color: #90c0ff; }
+        #feedback.warn     { background: rgba(255,180,0,0.15);  color: #ffd060; }
+
+        /* Input area */
+        .input-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        input[type="number"] {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #f0c040;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { opacity: 1; }
+
+        button {
+            padding: 0.65rem 1.4rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        button:active { transform: scale(0.96); }
+        button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+        #guess-btn {
+            background: #f0c040;
+            color: #1a1a2e;
+        }
+
+        #new-game-btn {
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            color: #e0e0e0;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.25rem;
+        }
+
+        #new-game-btn:hover { background: rgba(255,255,255,0.18); }
+
+        /* Win section */
+        #win-section {
+            display: none;
+            margin-top: 1rem;
+        }
+
+        #win-section p {
+            font-size: 0.9rem;
+            color: #a0a0c0;
+            margin-bottom: 0.5rem;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        #player-name {
+            flex: 1;
+            padding: 0.6rem 0.8rem;
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.15);
+            background: rgba(255,255,255,0.08);
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        #player-name:focus { border-color: #f0c040; outline: none; }
+
+        #post-score-btn {
+            background: #3a7bd5;
+            color: #fff;
+        }
+
+        #name-error {
+            color: #ff9090;
+            font-size: 0.82rem;
+            margin-top: 0.3rem;
+            min-height: 1.1rem;
+        }
+
+        .leaderboard-link {
+            display: inline-block;
+            margin-top: 1.2rem;
+            color: #90c0ff;
+            font-size: 0.85rem;
+            text-decoration: none;
+        }
+
+        .leaderboard-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Guess the Number!</h1>
+    <p class="subtitle">Duke is thinking of a number between 1 and 10…</p>
+
+    <div id="duke-container">
+        <img id="duke-img" src="/images/duke.png" alt="Duke the Java mascot">
+    </div>
+
+    <div class="stats">
+        <span>Guesses made: <strong id="guess-count">0</strong></span>
+        <span>Remaining: <strong id="guesses-remaining">5</strong></span>
+    </div>
+
+    <div id="feedback" class="info" role="status" aria-live="polite">
+        Pick a number and press Guess!
+    </div>
+
+    <div class="input-row">
+        <input type="number" id="guess-input" min="1" max="10" placeholder="1–10"
+               aria-label="Your guess" autocomplete="off">
+        <button id="guess-btn" type="button" aria-label="Submit guess">Guess</button>
+    </div>
+
+    <div id="win-section" aria-live="polite">
+        <p>Enter your name to post your score to the leaderboard:</p>
+        <div class="name-row">
+            <input type="text" id="player-name" maxlength="30" placeholder="Your name"
+                   aria-label="Player name for leaderboard">
+            <button id="post-score-btn" type="button">Post Score</button>
+        </div>
+        <div id="name-error" role="alert"></div>
+    </div>
+
+    <button id="new-game-btn" type="button">New Game</button>
+
+    <a href="/leaderboard.html" class="leaderboard-link">🏆 View Leaderboard</a>
+</div>
+
+<script>
+    const DUKE_REST  = '/images/duke.png';
+    const DUKE_WAVE1 = '/images/duke-wave1.png';
+    const DUKE_WAVE2 = '/images/duke-wave2.png';
+
+    let sessionId = null;
+
+    const guessInput       = document.getElementById('guess-input');
+    const guessBtn         = document.getElementById('guess-btn');
+    const feedback         = document.getElementById('feedback');
+    const guessCount       = document.getElementById('guess-count');
+    const guessesRemaining = document.getElementById('guesses-remaining');
+    const winSection       = document.getElementById('win-section');
+    const playerName       = document.getElementById('player-name');
+    const postScoreBtn     = document.getElementById('post-score-btn');
+    const nameError        = document.getElementById('name-error');
+    const newGameBtn       = document.getElementById('new-game-btn');
+    const dukeImg          = document.getElementById('duke-img');
+
+    async function startGame() {
+        winSection.style.display = 'none';
+        nameError.textContent = '';
+        playerName.value = '';
+        guessInput.value = '';
+        guessInput.disabled = false;
+        guessBtn.disabled = false;
+        setFeedback('Pick a number and press Guess!', 'info');
+
+        const res = await fetch('/api/game/start', { method: 'POST' });
+        const data = await res.json();
+        sessionId = data.sessionId;
+        updateStats(0, data.maxGuesses);
+        dukeImg.src = DUKE_REST;
+        dukeImg.classList.remove('celebrating');
+        guessInput.focus();
+    }
+
+    async function submitGuess() {
+        const val = parseInt(guessInput.value, 10);
+        if (isNaN(val) || val < 1 || val > 10) {
+            setFeedback('Please enter a whole number from 1 to 10.', 'warn');
+            guessInput.focus();
+            return;
+        }
+
+        guessBtn.disabled = true;
+
+        const res = await fetch(`/api/game/${sessionId}/guess`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ number: val })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            setFeedback(data.detail || 'Something went wrong.', 'negative');
+            guessBtn.disabled = false;
+            return;
+        }
+
+        updateStats(data.guessCount, data.guessesRemaining);
+        guessInput.value = '';
+
+        switch (data.result) {
+            case 'CORRECT':
+                setFeedback(data.message, 'positive');
+                disableGuessing();
+                celebrate();
+                showWinSection();
+                break;
+            case 'GAME_OVER':
+                setFeedback(data.message, 'negative');
+                disableGuessing();
+                dukeImg.src = DUKE_REST;
+                break;
+            case 'TOO_LOW':
+            case 'TOO_HIGH':
+                setFeedback(data.message, 'info');
+                guessBtn.disabled = false;
+                guessInput.focus();
+                break;
+        }
+    }
+
+    async function postScore() {
+        const name = playerName.value.trim();
+        if (!name) {
+            nameError.textContent = 'Please enter a name before posting.';
+            playerName.focus();
+            return;
+        }
+        if (name.length > 30) {
+            nameError.textContent = 'Name must be 30 characters or fewer.';
+            playerName.focus();
+            return;
+        }
+        nameError.textContent = '';
+
+        const res = await fetch(`/api/game/${sessionId}/score`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ playerName: name })
+        });
+
+        if (res.ok) {
+            winSection.style.display = 'none';
+            setFeedback('🏆 Score posted! Check the leaderboard.', 'positive');
+        } else {
+            const data = await res.json();
+            nameError.textContent = data.detail || 'Failed to post score.';
+        }
+    }
+
+    function celebrate() {
+        dukeImg.classList.remove('celebrating');
+        // Force reflow to restart animation
+        void dukeImg.offsetWidth;
+
+        let frame = 0;
+        const frames = [DUKE_WAVE1, DUKE_WAVE2];
+        const interval = setInterval(() => {
+            dukeImg.src = frames[frame % frames.length];
+            frame++;
+        }, 200);
+
+        dukeImg.classList.add('celebrating');
+
+        dukeImg.addEventListener('animationend', () => {
+            clearInterval(interval);
+            dukeImg.src = DUKE_REST;
+        }, { once: true });
+    }
+
+    function showWinSection() {
+        winSection.style.display = 'block';
+        playerName.focus();
+    }
+
+    function disableGuessing() {
+        guessInput.disabled = true;
+        guessBtn.disabled = true;
+    }
+
+    function updateStats(made, remaining) {
+        guessCount.textContent = made;
+        guessesRemaining.textContent = remaining;
+    }
+
+    function setFeedback(message, type) {
+        feedback.textContent = message;
+        feedback.className = type;
+    }
+
+    guessBtn.addEventListener('click', submitGuess);
+    newGameBtn.addEventListener('click', startGame);
+    postScoreBtn.addEventListener('click', postScore);
+
+    guessInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') submitGuess();
+    });
+
+    playerName.addEventListener('keydown', e => {
+        if (e.key === 'Enter') postScore();
+    });
+
+    // Start automatically on load
+    startGame();
+</script>
+</body>
+</html>

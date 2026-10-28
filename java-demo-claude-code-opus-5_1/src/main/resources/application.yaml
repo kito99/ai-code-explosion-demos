@@ -1,6 +1,6 @@
 spring:
   application:
-    name: java-demo-claude-code-opus-5-1
+    name: java-demo-claude-code-opus-5_1
   threads:
     virtual:
       enabled: true

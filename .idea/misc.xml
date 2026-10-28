@@ -7,10 +7,10 @@
   <component name="MavenProjectsManager">
     <option name="originalFiles">
       <list>
-        <option value="$PROJECT_DIR$/jakarta-ee-demo-bob-claude-opus-4-5-1/pom.xml" />
-        <option value="$PROJECT_DIR$/jakarta-ee-demo-claude-code-opus-5-1/pom.xml" />
-        <option value="$PROJECT_DIR$/java-demo-bob-claude-opus-4-5-1/pom.xml" />
-        <option value="$PROJECT_DIR$/java-demo-claude-code-opus-5-1/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-bob-claude-opus-4-5_1/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-claude-code-opus-5_1/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-bob-claude-opus-4-5_1/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-claude-code-opus-5_1/pom.xml" />
       </list>
     </option>
   </component>

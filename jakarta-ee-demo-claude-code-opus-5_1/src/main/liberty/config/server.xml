@@ -45,5 +45,5 @@
 
     <applicationManager autoExpand="true"/>
 
-    <webApplication id="jakarta-ee-demo-claude-code-opus-5-1" location="jakarta-ee-demo-claude-code-opus-5-1.war" contextRoot="/"/>
+    <webApplication id="jakarta-ee-demo-claude-code-opus-5_1" location="jakarta-ee-demo-claude-code-opus-5_1.war" contextRoot="/"/>
 </server>

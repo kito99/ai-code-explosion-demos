@@ -17,7 +17,7 @@ leaderboard.
 
 ### Lines of code
 
-Commands run from `jakarta-ee-demo-bob-claude-opus-4-5-1/`.
+Commands run from `jakarta-ee-demo-bob-claude-opus-4-5_1/`.
 
 **Application code** (Java + Maven + XML + config; excludes HTML, CSS, JS, SVG):
 
@@ -88,14 +88,14 @@ SUM:                             4             69             27            399
 ### Start
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 docker compose up -d
 ```
 
 ### Stop
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 docker compose down
 ```
 
@@ -146,7 +146,7 @@ docker compose exec db psql -U guessuser -d guessdb -c "DELETE FROM leaderboard_
 ## Build
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn package
 ```
 
@@ -160,21 +160,21 @@ This creates, configures, and packages the Liberty server under
 Start the database first (see above), then:
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn liberty:run
 ```
 
 Or start Liberty in the background:
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn liberty:start
 ```
 
 Stop:
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn liberty:stop
 ```
 
@@ -187,7 +187,7 @@ The game is served at <http://localhost:9080/>.
 Unit tests run without any external dependencies:
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn test
 ```
 
@@ -195,7 +195,7 @@ Integration tests (`*IT`) start a PostgreSQL Testcontainer and the Liberty
 server automatically — no database or server needs to be running beforehand:
 
 ```bash
-# from jakarta-ee-demo-bob-claude-opus-4-5-1/
+# from jakarta-ee-demo-bob-claude-opus-4-5_1/
 mvn verify
 ```
 

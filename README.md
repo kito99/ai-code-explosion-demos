@@ -18,7 +18,7 @@ models and the results compared side by side.
 | `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                 |
 | `.skills/`              | The Context7 skill. Both harnesses symlink to it.                   |
 
-Each prompt is only three lines: the stack to build, the project name prefix to
+Each prompt specifies only the the stack to build, the project name prefix to
 use, and a pointer to `demo-prompt-common.md` for everything else. That keeps the
 shared rules in one place, so a change to the naming scheme or to what the
 README must record lands in every prompt at once.
@@ -112,8 +112,8 @@ worked out by looking at the demo directories already here.
 ## The generated apps
 
 Each app lives in a directory named
-`[prefix]-demo-[agent harness]-[model]-xx`, where the prefix is the one the
-prompt hands the agent. So `java-demo-claude-code-opus-5-1` is the first plain
+`[prefix]-demo-[agent harness]-[model]_xx`, where the prefix is the one the
+prompt hands the agent. So `java-demo-claude-code-opus-5_1` is the first plain
 Java demo built by Claude Code using Claude Opus 5. The suffix counts up per
 combination of prefix, harness, and model.
 
@@ -124,46 +124,3 @@ commands, along with the date, harness, model, and line counts.
 
 Each app brings its own `compose.yaml` for PostgreSQL, so check that app's
 README for its ports before running two demos at once.
-
-## Line counts
-
-Counted with cloc 2.06, leaving out front-end code and image assets so stacks
-compare fairly. Application code is the Java sources plus the build and
-configuration files; test code is the test sources.
-
-| Demo                                   | Application | Test | Total |
-|----------------------------------------|------------:|-----:|------:|
-| `java-demo-claude-code-opus-5-1`       |         928 |  651 | 1,579 |
-| `jakarta-ee-demo-claude-code-opus-5-1` |       1,076 |  814 | 1,890 |
-
-The Jakarta EE build spends its extra application lines on Liberty and
-persistence configuration rather than on Java, which carries 849 lines against
-the plain Java app's 762 even though it covers the same requirements.
-
-Each demo's own README holds the per-language breakdown and the exact commands,
-which is where to look rather than here when a demo gets regenerated.
-
-## Line counts
-
-Generated with `cloc . --exclude-dir=node_modules,.git,build,dist,target,.bob`:
-
-```
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Java                           134           1111            507           4875
-Markdown                         9            362              0           1145
-HTML                             8             83              2            815
-CSS                              3            118             15            673
-JavaScript                       6             85             11            572
-Maven                            4             47             39            505
-XML                             13             21             11            445
-SVG                              5              2              4            203
-YAML                             7             14              7            169
-Properties                       2              3             14             12
-JSON                             1              0              0             11
-Text                             2              4              0              8
--------------------------------------------------------------------------------
-SUM:                           194           1850            610           9433
--------------------------------------------------------------------------------
-```

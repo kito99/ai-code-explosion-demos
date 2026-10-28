@@ -5,7 +5,7 @@ A small web game built from [`BRD.md`](BRD.md): Duke thinks of a number from 1 t
 restart.
 
 Every command below runs from this directory
-(`java-demo-claude-code-opus-5-1`), not from the repository root. The root holds
+(`java-demo-claude-code-opus-5_1`), not from the repository root. The root holds
 one directory per demo and no build file of its own.
 
 ## How this demo was generated

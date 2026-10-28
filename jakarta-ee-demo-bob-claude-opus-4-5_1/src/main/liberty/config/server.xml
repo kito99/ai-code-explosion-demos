@@ -22,7 +22,7 @@
                   httpsPort="${https.port}"
                   host="*"/>
 
-    <webApplication location="jakarta-ee-demo-bob-claude-opus-4-5-1.war" contextRoot="/"/>
+    <webApplication location="jakarta-ee-demo-bob-claude-opus-4-5_1.war" contextRoot="/"/>
 
     <!-- PostgreSQL DataSource -->
     <dataSource id="DefaultDataSource" jndiName="jdbc/guessDB">

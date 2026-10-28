@@ -72,7 +72,7 @@ SUM:                             4             62              8            317
 Start PostgreSQL:
 
 ```bash
-# Run from the java-demo-bob-claude-opus-4-5-1/ directory
+# Run from the java-demo-bob-claude-opus-4-5_1/ directory
 docker compose up -d
 ```
 
@@ -107,7 +107,7 @@ The schema is generated automatically by Hibernate on first startup (`spring.jpa
 
 ## Build, test, and run
 
-All commands must be run from the `java-demo-bob-claude-opus-4-5-1/` directory.
+All commands must be run from the `java-demo-bob-claude-opus-4-5_1/` directory.
 
 ### Build
 
@@ -136,7 +136,7 @@ mvn spring-boot:run
 Or run the packaged jar:
 
 ```bash
-java --enable-preview -jar target/java-demo-bob-claude-opus-4-5-1-1.0.0.jar
+java --enable-preview -jar target/java-demo-bob-claude-opus-4-5_1-1.0.0.jar
 ```
 
 ---

@@ -1,1 +1,5 @@
+# Maven build output, in every demo directory
+target/
+
+# Bob's error logs
 /.bob/.bob-errors/

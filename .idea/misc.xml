@@ -3,6 +3,17 @@
   <component name="ComposerSettings">
     <execution />
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-bob-claude-opus-4-5-1/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-claude-code-opus-5-1/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-bob-claude-opus-4-5-1/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-claude-code-opus-5-1/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" project-jdk-name="temurin-26" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

@@ -15,6 +15,14 @@ model the way the existing demo folders do, so Claude Code running Opus 5 gives
 `java-demo-claude-code-opus-5-2`. If no demo exists with the same prefix, agent
 harness, and model, use the suffix `1`.
 
+Use that same folder name as the build artifact id, so the output of a build says
+which demo produced it. Carry it through everything derived from the artifact id
+as well: the packaged jar or WAR name, any server configuration that has to
+reference that file by name, container names in `compose.yaml`, and the
+OpenTelemetry service name. Leave Java package names out of this, since a folder
+name containing hyphens and a digit is not a legal package; `com.example` and a
+short app-specific segment are fine there.
+
 ## Database
 
 Use PostgreSQL 18 from the official Docker image. Pin the version rather than

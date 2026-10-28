@@ -124,3 +124,46 @@ commands, along with the date, harness, model, and line counts.
 
 Each app brings its own `compose.yaml` for PostgreSQL, so check that app's
 README for its ports before running two demos at once.
+
+## Line counts
+
+Counted with cloc 2.06, leaving out front-end code and image assets so stacks
+compare fairly. Application code is the Java sources plus the build and
+configuration files; test code is the test sources.
+
+| Demo                                   | Application | Test | Total |
+|----------------------------------------|------------:|-----:|------:|
+| `java-demo-claude-code-opus-5-1`       |         928 |  651 | 1,579 |
+| `jakarta-ee-demo-claude-code-opus-5-1` |       1,076 |  814 | 1,890 |
+
+The Jakarta EE build spends its extra application lines on Liberty and
+persistence configuration rather than on Java, which carries 849 lines against
+the plain Java app's 762 even though it covers the same requirements.
+
+Each demo's own README holds the per-language breakdown and the exact commands,
+which is where to look rather than here when a demo gets regenerated.
+
+## Line counts
+
+Generated with `cloc . --exclude-dir=node_modules,.git,build,dist,target,.bob`:
+
+```
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Java                           134           1111            507           4875
+Markdown                         9            362              0           1145
+HTML                             8             83              2            815
+CSS                              3            118             15            673
+JavaScript                       6             85             11            572
+Maven                            4             47             39            505
+XML                             13             21             11            445
+SVG                              5              2              4            203
+YAML                             7             14              7            169
+Properties                       2              3             14             12
+JSON                             1              0              0             11
+Text                             2              4              0              8
+-------------------------------------------------------------------------------
+SUM:                           194           1850            610           9433
+-------------------------------------------------------------------------------
+```

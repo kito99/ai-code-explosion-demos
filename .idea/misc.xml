@@ -11,6 +11,12 @@
         <option value="$PROJECT_DIR$/jakarta-ee-demo-claude-code-opus-5_1/pom.xml" />
         <option value="$PROJECT_DIR$/java-demo-bob-claude-opus-4-5_1/pom.xml" />
         <option value="$PROJECT_DIR$/java-demo-claude-code-opus-5_1/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-bob-claude-opus-4-5_2/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-claude-code-opus-5_2/pom.xml" />
+        <option value="$PROJECT_DIR$/jakarta-ee-demo-copilot-cli-sonnet-5-5_1/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-bob-claude-opus-4-5_2/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-claude-code-opus-5_2/pom.xml" />
+        <option value="$PROJECT_DIR$/java-demo-copilot-cli-sonnet-5-5_1/pom.xml" />
       </list>
     </option>
   </component>

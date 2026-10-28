@@ -34,8 +34,6 @@ theme of the presentation.
 - A running count of guesses made and guesses remaining.
 - A limited number of guesses per game, with a lose state when they run out.
 - The ability to start a new game at any time.
-- Telemetry emitted by the running app so its behavior and health can be
-  observed.
 - An HTTP API for the server-side game actions, described by an OpenAPI
   definition and browsable through interactive documentation.
 - A name entered by the player when they win, so their score can be posted.
@@ -53,7 +51,6 @@ theme of the presentation.
 - Per-player history or statistics beyond the single list of best results.
 - Difficulty levels or configurable number ranges or guess limits.
 - Multiplayer or turn-based play against other people.
-- A hosted, long-term telemetry store or dashboards built on top of it.
 - Versioning or backward-compatibility commitments to third-party consumers
   of the API.
 
@@ -155,16 +152,6 @@ theme of the presentation.
   player what just happened and what they can do next.
 - **NFR-5 - Duke Images.** The game includes the official Duke image to 
   represent the character (repository: https://github.com/openjdk/duke).
-- **NFR-6 — Observability.** The app is observable through telemetry it emits
-  while running. It produces traces, metrics, and structured logs covering the
-  game lifecycle and every API request, so someone can answer how often games
-  are started, won, and lost, how long requests take, and where errors come
-  from, without reading the source. Telemetry uses an open standard such as
-  OpenTelemetry so it can be sent to any compatible collector, and the
-  destination is configurable without a code change. Telemetry carries no
-  personally identifying information. When no collector is reachable, the game
-  still plays and still meets NFR-2, so telemetry delivery never delays player
-  feedback.
 - **NFR-7 — OpenAPI.** Every server-side game action the front-end performs is
   available through an HTTP API described by an OpenAPI definition. The
   definition is served by the running app, covers each endpoint's request shape,
@@ -174,10 +161,6 @@ theme of the presentation.
 - **NFR-8 — Durable storage.** Leaderboard entries are kept in a database and
   survive a restart of the app. Consistent with NFR-1, no specific database
   product or data access technology is mandated by this document.
-- **NFR-9 — Name handling.** The name a player types is the only personal data
-  the app stores. It appears on the leaderboard and nowhere else; in particular
-  it is never written to telemetry, which NFR-6 requires to stay free of
-  personally identifying information.
 
 ## 8. Assumptions
 
@@ -197,9 +180,6 @@ theme of the presentation.
 - The guesses-remaining count is always accurate and never drops below zero.
 - Duke is clearly visible as the character thinking of the number, and plays his
   celebration animation when the player wins.
-- Playing games through to both a win and a loss produces telemetry covering
-  those outcomes and the API requests behind them, visible wherever the app is
-  currently configured to send it.
 - The running app serves an OpenAPI definition that matches its endpoints, along
   with browsable documentation generated from it.
 - Winning and entering a valid name adds a leaderboard entry showing that name

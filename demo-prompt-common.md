@@ -29,10 +29,10 @@ harness, and model, use the suffix `1`.
 Use that same folder name as the build artifact id, so the output of a build
 says which demo produced it. Carry it through everything derived from the
 artifact id as well: the packaged jar or WAR name, any server configuration
-that has to reference that file by name, container names in `compose.yaml`,
-and the OpenTelemetry service name. Leave Java package names out of this,
-since a folder name containing hyphens and a digit is not a legal package;
-`com.example` and a short app-specific segment is fine there.
+that has to reference that file by name, and container names in `compose.yaml`.
+Leave Java package names out of this, since a folder name containing hyphens
+and a digit is not a legal package; `com.example` and a short app-specific
+segment is fine there.
 
 ## Database
 
@@ -45,16 +45,6 @@ values the app already defaults to, so a fresh clone runs with no setup.
 
 A fresh database must end up with the right tables without a manual step, and
 the README must say how the schema gets created.
-
-## Telemetry
-
-Export telemetry to the console by default, so the app needs nothing else
-running. Spans and metrics land in the app's own log, which is enough to show
-that the telemetry is there.
-
-Do not add a collector to `compose.yaml`. NFR-6 only requires that the
-destination be configurable, so record in the README which property to change,
-and the OTLP endpoint to set, for pointing the app at a real collector later.
 
 ## Tests
 
@@ -77,7 +67,7 @@ In the `README.md` file, record the following:
 * Date of generation
 * Name of the agent harness
 * Name and version of the model
-* # of lines of code, as two separate counts:
+* number of lines of code, as two separate counts:
   * Application code: the implementation language plus build and configuration
     files
   * Test code: the same, for the test sources
@@ -87,9 +77,10 @@ In the `README.md` file, record the following:
   commands used and their output tables so the numbers can be reproduced.
   Adjust the paths below to the project's own layout but keep the language
   exclusions so counts stay comparable across demos:
-
-      cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/main pom.xml
-      cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/test
+  ```
+  cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/main pom.xml
+  cloc --exclude-lang=HTML,CSS,JavaScript,SVG,Markdown,Text src/test
+  ```
 
 Also record:
 
@@ -98,7 +89,6 @@ Also record:
 * The database name, user, and password the app defaults to
 * How the schema gets created
 * The URLs for the OpenAPI documentation and the leaderboard screen
-* How to view the telemetry the app emits
 * How to clear the leaderboard between runs, since the app itself has no way to
   delete entries
 

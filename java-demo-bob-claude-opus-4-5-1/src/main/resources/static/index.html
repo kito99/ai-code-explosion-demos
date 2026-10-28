@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the Number with Duke!</title>
+    <style>
+        :root {
+            --bg: #f0f4ff;
+            --surface: #ffffff;
+            --primary: #1a56db;
+            --primary-hover: #1e429f;
+            --danger: #c81e1e;
+            --success: #057a55;
+            --text: #111928;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --radius: 12px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        header {
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        header h1 { font-size: 1.4rem; font-weight: 700; }
+        header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        header a:hover { text-decoration: underline; }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            width: 100%;
+            max-width: 560px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.25rem;
+        }
+        #duke-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+        }
+        #duke-container img {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            object-fit: contain;
+        }
+        .stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+        .stats span { font-weight: 600; color: var(--text); }
+        #feedback {
+            font-size: 1.1rem;
+            font-weight: 500;
+            min-height: 1.6em;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: #f9fafb;
+            width: 100%;
+        }
+        #feedback.win { background: #d1fae5; color: var(--success); }
+        #feedback.lose { background: #fee2e2; color: var(--danger); }
+        .guess-row {
+            display: flex;
+            gap: 0.75rem;
+            width: 100%;
+        }
+        #guess-input {
+            flex: 1;
+            padding: 0.65rem 1rem;
+            font-size: 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        #guess-input:focus { border-color: var(--primary); }
+        button {
+            padding: 0.65rem 1.25rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        #submit-btn {
+            background: var(--primary);
+            color: #fff;
+        }
+        #submit-btn:hover:not(:disabled) { background: var(--primary-hover); }
+        #submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        #new-game-btn {
+            background: #e5e7eb;
+            color: var(--text);
+            width: 100%;
+        }
+        #new-game-btn:hover { background: #d1d5db; }
+
+        /* Win score panel */
+        #score-panel {
+            display: none;
+            flex-direction: column;
+            gap: 0.75rem;
+            width: 100%;
+            background: #ecfdf5;
+            border: 1px solid #6ee7b7;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        #score-panel label { font-weight: 600; font-size: 0.95rem; }
+        #name-input {
+            padding: 0.6rem 0.85rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            width: 100%;
+            outline: none;
+        }
+        #name-input:focus { border-color: var(--success); }
+        #name-error { color: var(--danger); font-size: 0.85rem; min-height: 1.2em; }
+        #post-btn {
+            background: var(--success);
+            color: #fff;
+        }
+        #post-btn:hover { background: #046c4e; }
+        #post-success { color: var(--success); font-weight: 600; font-size: 0.95rem; }
+
+        /* Duke bounce animation */
+        @keyframes bounce {
+            0%   { transform: translateY(0); }
+            30%  { transform: translateY(-28px); }
+            50%  { transform: translateY(0); }
+            70%  { transform: translateY(-18px); }
+            85%  { transform: translateY(0); }
+            95%  { transform: translateY(-8px); }
+            100% { transform: translateY(0); }
+        }
+        .bouncing { animation: bounce 1.5s ease-in-out 1; }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🎲 Guess the Number with Duke!</h1>
+    <a href="/leaderboard.html">🏆 Leaderboard</a>
+</header>
+
+<main class="card">
+    <div id="duke-container" aria-hidden="true">
+        <img id="duke-img" src="/img/duke.png" alt="Duke the Java mascot">
+        <img id="duke-wave1" src="/img/duke-wave1.png" alt="" style="opacity:0">
+        <img id="duke-wave2" src="/img/duke-wave2.png" alt="" style="opacity:0">
+    </div>
+
+    <div class="stats">
+        <div>Guesses made: <span id="guesses-used">0</span></div>
+        <div>Remaining: <span id="guesses-remaining">5</span></div>
+    </div>
+
+    <div id="feedback" role="status" aria-live="polite">
+        I'm thinking of a number between 1 and 10. You have 5 guesses!
+    </div>
+
+    <div class="guess-row">
+        <label for="guess-input" class="sr-only">Your guess (1–10)</label>
+        <input
+            id="guess-input"
+            type="number"
+            min="1" max="10"
+            placeholder="1 – 10"
+            aria-label="Enter your guess, a number between 1 and 10"
+            autocomplete="off"
+        />
+        <button id="submit-btn" type="button">Guess!</button>
+    </div>
+
+    <div id="score-panel" aria-live="polite">
+        <label for="name-input">Enter your name to post your score:</label>
+        <input
+            id="name-input"
+            type="text"
+            maxlength="30"
+            placeholder="Your name"
+            aria-label="Your name for the leaderboard"
+        />
+        <div id="name-error" role="alert"></div>
+        <button id="post-btn" type="button">Post Score 🏆</button>
+        <div id="post-success"></div>
+    </div>
+
+    <button id="new-game-btn" type="button">New Game 🔄</button>
+</main>
+
+<script>
+    const API = '/api';
+
+    let gameId = null;
+    let gameOver = false;
+    let scorePosted = false;
+
+    const dukeImg   = document.getElementById('duke-img');
+    const dukeWave1 = document.getElementById('duke-wave1');
+    const dukeWave2 = document.getElementById('duke-wave2');
+    const feedbackEl    = document.getElementById('feedback');
+    const guessInput    = document.getElementById('guess-input');
+    const submitBtn     = document.getElementById('submit-btn');
+    const newGameBtn    = document.getElementById('new-game-btn');
+    const guessesUsed   = document.getElementById('guesses-used');
+    const guessesRemain = document.getElementById('guesses-remaining');
+    const scorePanel    = document.getElementById('score-panel');
+    const nameInput     = document.getElementById('name-input');
+    const nameError     = document.getElementById('name-error');
+    const postBtn       = document.getElementById('post-btn');
+    const postSuccess   = document.getElementById('post-success');
+
+    function setFeedback(msg, cls = '') {
+        feedbackEl.textContent = msg;
+        feedbackEl.className = cls;
+    }
+
+    function updateStats(used, remaining) {
+        guessesUsed.textContent = used;
+        guessesRemain.textContent = remaining;
+    }
+
+    function setInputDisabled(disabled) {
+        guessInput.disabled = disabled;
+        submitBtn.disabled = disabled;
+    }
+
+    function showScorePanel() {
+        scorePanel.style.display = 'flex';
+        nameInput.value = '';
+        nameError.textContent = '';
+        postSuccess.textContent = '';
+        postBtn.disabled = false;
+        nameInput.focus();
+    }
+
+    function hideScorePanel() {
+        scorePanel.style.display = 'none';
+    }
+
+    function playWinAnimation() {
+        // Alternate between wave frames while bouncing
+        let frame = 0;
+        const frames = [dukeWave1, dukeWave2];
+        dukeImg.style.opacity = '0';
+
+        const interval = setInterval(() => {
+            frames[(frame + 1) % 2].style.opacity = '0';
+            frames[frame % 2].style.opacity = '1';
+            frame++;
+        }, 200);
+
+        const container = document.getElementById('duke-container');
+        container.classList.add('bouncing');
+
+        container.addEventListener('animationend', () => {
+            clearInterval(interval);
+            dukeWave1.style.opacity = '0';
+            dukeWave2.style.opacity = '0';
+            dukeImg.style.opacity = '1';
+            container.classList.remove('bouncing');
+        }, { once: true });
+    }
+
+    async function startGame() {
+        gameOver = false;
+        scorePosted = false;
+        hideScorePanel();
+        updateStats(0, 5);
+        setFeedback("I'm thinking of a number between 1 and 10. You have 5 guesses!");
+        setInputDisabled(false);
+        guessInput.value = '';
+        guessInput.focus();
+
+        try {
+            const res = await fetch(`${API}/game/start`, { method: 'POST' });
+            const data = await res.json();
+            if (!res.ok) { setFeedback('Could not start game. Please refresh.'); return; }
+            gameId = data.gameId;
+            updateStats(0, data.guessesRemaining);
+            setFeedback(data.message);
+        } catch {
+            setFeedback('Network error. Please refresh the page.');
+        }
+    }
+
+    async function submitGuess() {
+        const raw = guessInput.value.trim();
+        const num = parseInt(raw, 10);
+
+        if (!raw || isNaN(num) || num < 1 || num > 10) {
+            setFeedback('Please enter a whole number between 1 and 10.');
+            guessInput.select();
+            return;
+        }
+
+        setInputDisabled(true);
+
+        try {
+            const res = await fetch(`${API}/game/guess`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gameId, guess: num })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                setFeedback(data.detail || 'Something went wrong.');
+                setInputDisabled(gameOver);
+                return;
+            }
+
+            updateStats(data.guessesUsed, data.guessesRemaining);
+
+            if (data.status === 'WON') {
+                gameOver = true;
+                setFeedback(data.feedback, 'win');
+                playWinAnimation();
+                showScorePanel();
+            } else if (data.status === 'LOST') {
+                gameOver = true;
+                setFeedback(data.feedback, 'lose');
+            } else {
+                setFeedback(data.feedback);
+                guessInput.value = '';
+                setInputDisabled(false);
+                guessInput.focus();
+            }
+        } catch {
+            setFeedback('Network error. Try again.');
+            setInputDisabled(false);
+        }
+    }
+
+    async function postScore() {
+        const name = nameInput.value;
+        const trimmed = name.trim();
+
+        if (!trimmed || trimmed.length > 30) {
+            nameError.textContent = 'Please enter a name (1–30 characters).';
+            nameInput.focus();
+            return;
+        }
+
+        postBtn.disabled = true;
+        nameError.textContent = '';
+
+        try {
+            const res = await fetch(`${API}/leaderboard`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gameId, playerName: trimmed })
+            });
+            const data = await res.json();
+
+            if (!res.ok) {
+                nameError.textContent = data.detail || 'Could not post score.';
+                postBtn.disabled = false;
+                return;
+            }
+
+            scorePosted = true;
+            postSuccess.textContent = `Score posted! You used ${data.guessCount} ${data.guessCount === 1 ? 'guess' : 'guesses'}.`;
+            postBtn.style.display = 'none';
+            nameInput.disabled = true;
+        } catch {
+            nameError.textContent = 'Network error. Try again.';
+            postBtn.disabled = false;
+        }
+    }
+
+    // Key listeners
+    guessInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !submitBtn.disabled) submitGuess();
+    });
+    nameInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && !postBtn.disabled) postScore();
+    });
+
+    submitBtn.addEventListener('click', submitGuess);
+    newGameBtn.addEventListener('click', startGame);
+    postBtn.addEventListener('click', postScore);
+
+    // Start on load
+    startGame();
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Leaderboard &ndash; Guess the Number with Duke</title>
+    <link rel="icon" href="images/duke-waving.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="site-header">
+    <h1>Leaderboard</h1>
+    <nav aria-label="Main">
+        <a class="nav-link" href="index.html">Back to the game</a>
+    </nav>
+</header>
+
+<main>
+    <p class="message">The best wins on this server, fewest guesses first.</p>
+
+    <p id="empty-leaderboard" class="empty" hidden>No scores have been posted so far. Win a game to be first!</p>
+
+    <table id="leaderboard" class="leaderboard" hidden>
+        <caption class="visually-hidden">Top wins, ranked by fewest guesses</caption>
+        <thead>
+        <tr>
+            <th scope="col">Rank</th>
+            <th scope="col">Name</th>
+            <th scope="col">Guesses</th>
+        </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+    </table>
+
+    <p id="leaderboard-error" class="message message--error" role="status" aria-live="polite" hidden></p>
+</main>
+
+<footer class="site-footer">
+    <p>
+        Duke artwork from the
+        <a href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.
+        API documentation at <a href="/openapi/ui">/openapi/ui</a>.
+    </p>
+</footer>
+
+<script src="js/leaderboard.js"></script>
+</body>
+</html>

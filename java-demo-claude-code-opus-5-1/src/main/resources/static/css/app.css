@@ -1,0 +1,311 @@
+:root {
+    --ink: #10151c;
+    --ink-soft: #37434f;
+    --page: #f3f6fa;
+    --card: #ffffff;
+    --accent: #0b5fa5;
+    --accent-dark: #084b84;
+    --good: #0f6b3f;
+    --bad: #9b1c1c;
+    --line: #c9d4e0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font: 17px/1.6 "Helvetica Neue", Arial, sans-serif;
+}
+
+.site-header,
+.site-footer {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+}
+
+.site-footer {
+    border-bottom: none;
+    border-top: 1px solid var(--line);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+a {
+    color: var(--accent);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+}
+
+main {
+    max-width: 62rem;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+}
+
+.game {
+    display: grid;
+    grid-template-columns: minmax(16rem, 22rem) 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (max-width: 46rem) {
+    .game {
+        grid-template-columns: 1fr;
+    }
+}
+
+.duke-panel,
+.play-panel,
+.leaderboard table {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.speech-bubble {
+    position: relative;
+    background: #e8f1fb;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.speech-bubble::after {
+    content: "";
+    position: absolute;
+    left: 2rem;
+    bottom: -11px;
+    border: 10px solid transparent;
+    border-top-color: #e8f1fb;
+}
+
+.duke-stage {
+    position: relative;
+    height: 18rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.duke {
+    position: absolute;
+    bottom: 0;
+    max-height: 100%;
+    width: auto;
+}
+
+.duke-wave {
+    opacity: 0;
+}
+
+/* Duke springs up and settles back down three times, waving, then returns to his resting pose. */
+.duke-stage.celebrating .duke-resting {
+    opacity: 0;
+}
+
+.duke-stage.celebrating {
+    animation: duke-jump 0.5s ease-in-out 3;
+}
+
+.duke-stage.celebrating .duke-wave-a {
+    animation: wave-frame-a 0.5s steps(1, end) 3;
+}
+
+.duke-stage.celebrating .duke-wave-b {
+    animation: wave-frame-b 0.5s steps(1, end) 3;
+}
+
+@keyframes duke-jump {
+    0% { transform: translateY(0); }
+    30% { transform: translateY(-2.2rem); }
+    55% { transform: translateY(0); }
+    70% { transform: translateY(-0.6rem); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes wave-frame-a {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+@keyframes wave-frame-b {
+    0% { opacity: 0; }
+    50% { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .duke-stage.celebrating,
+    .duke-stage.celebrating .duke-wave-a,
+    .duke-stage.celebrating .duke-wave-b {
+        animation: none;
+    }
+
+    .duke-stage.celebrating .duke-wave-a {
+        opacity: 1;
+    }
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+}
+
+.guess-row {
+    display: flex;
+    gap: 0.75rem;
+}
+
+input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 0.6rem 0.75rem;
+    font-size: 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--ink);
+}
+
+button,
+.button-link {
+    display: inline-block;
+    padding: 0.6rem 1.1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+button:hover,
+.button-link:hover {
+    background: var(--accent-dark);
+}
+
+button:disabled {
+    background: #8da2b5;
+    cursor: not-allowed;
+}
+
+#new-game-button,
+.button-link {
+    background: #fff;
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+#new-game-button:hover,
+.button-link:hover {
+    background: #e8f1fb;
+    color: var(--accent);
+}
+
+.counts {
+    margin: 1.25rem 0 0.25rem;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+}
+
+.message {
+    margin: 0.25rem 0 1.25rem;
+    font-size: 1.15rem;
+    font-weight: 600;
+    min-height: 1.6em;
+}
+
+.message.won {
+    color: var(--good);
+}
+
+.message.lost,
+.message.invalid {
+    color: var(--bad);
+}
+
+.name-form {
+    border-top: 1px solid var(--line);
+    padding-top: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.hint {
+    margin: 0.5rem 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.leaderboard table {
+    width: 100%;
+    border-collapse: collapse;
+    padding: 0;
+    overflow: hidden;
+}
+
+.leaderboard th,
+.leaderboard td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--line);
+}
+
+.leaderboard tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.leaderboard td.rank,
+.leaderboard td.guesses {
+    font-variant-numeric: tabular-nums;
+}
+
+.lede {
+    color: var(--ink-soft);
+    margin-top: 0;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+}

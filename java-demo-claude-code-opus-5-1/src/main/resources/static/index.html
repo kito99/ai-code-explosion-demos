@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="icon" href="img/duke-standing.png">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="site-header">
+    <h1>Guess the Number with Duke</h1>
+    <nav aria-label="Main"><a href="leaderboard.html">Leaderboard</a></nav>
+</header>
+
+<main class="game">
+    <section class="duke-panel" aria-labelledby="duke-caption">
+        <div class="speech-bubble" id="duke-caption">I&rsquo;m thinking of a number between 1 and 10.</div>
+        <div class="duke-stage" id="duke-stage">
+            <img class="duke duke-resting" id="duke-resting" src="img/duke-standing.png"
+                 alt="Duke, the Java mascot, standing with his hands on his hips">
+            <img class="duke duke-wave duke-wave-a" src="img/duke-wave-1.png" alt="" aria-hidden="true">
+            <img class="duke duke-wave duke-wave-b" src="img/duke-wave-2.png" alt="" aria-hidden="true">
+        </div>
+    </section>
+
+    <section class="play-panel" aria-labelledby="play-heading">
+        <h2 id="play-heading" class="visually-hidden">Make a guess</h2>
+
+        <form id="guess-form" class="guess-form" novalidate>
+            <label for="guess-input">Your guess (1&ndash;10)</label>
+            <div class="guess-row">
+                <input type="number" id="guess-input" name="guess" min="1" max="10" step="1"
+                       inputmode="numeric" autocomplete="off" required>
+                <button type="submit" id="guess-button">Guess</button>
+            </div>
+        </form>
+
+        <p class="counts" id="counts">Guesses made: 0 &middot; Guesses left: 5</p>
+        <p class="message" id="message" role="status" aria-live="polite">Good luck! Take your best guess.</p>
+
+        <form id="name-form" class="name-form" hidden novalidate>
+            <label for="name-input">Post your score as</label>
+            <div class="guess-row">
+                <input type="text" id="name-input" name="name" maxlength="30" autocomplete="off">
+                <button type="submit" id="post-button">Post score</button>
+            </div>
+            <p class="hint">Up to 30 characters. Skip it by starting a new game.</p>
+        </form>
+
+        <div class="actions">
+            <button type="button" id="new-game-button">New game</button>
+            <a class="button-link" href="leaderboard.html">See the leaderboard</a>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <p>Duke artwork from the <a href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.</p>
+</footer>
+
+<script src="js/game.js"></script>
+</body>
+</html>

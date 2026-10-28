@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Guess the Number with Duke</title>
+    <link rel="icon" href="images/duke-waving.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+<header class="site-header">
+    <h1>Guess the Number with Duke</h1>
+    <nav aria-label="Main">
+        <a class="nav-link" href="leaderboard.html">Leaderboard</a>
+    </nav>
+</header>
+
+<main>
+    <section class="stage" aria-label="Duke">
+        <img id="duke" class="duke duke--thinking" src="images/duke-thinking.svg"
+             alt="Duke, the Java mascot, thinking of a number">
+    </section>
+
+    <p id="message" class="message" role="status" aria-live="polite">Starting a game&hellip;</p>
+
+    <form id="guess-form" class="guess-form" novalidate>
+        <label class="guess-label" for="guess">Your guess (1&ndash;10)</label>
+        <div class="guess-row">
+            <input id="guess" name="guess" class="guess-input" type="number" inputmode="numeric"
+                   min="1" max="10" step="1" autocomplete="off" required
+                   aria-describedby="message counters">
+            <button id="guess-button" class="button button--primary" type="submit">Guess</button>
+        </div>
+    </form>
+
+    <p id="counters" class="counters">0 guesses made &middot; 5 remaining</p>
+
+    <form id="score-form" class="score-form" hidden novalidate>
+        <h2 class="score-heading">Put your win on the leaderboard</h2>
+        <label class="score-label" for="player-name">Your name</label>
+        <div class="guess-row">
+            <input id="player-name" name="playerName" class="name-input" type="text"
+                   maxlength="30" autocomplete="off" required aria-describedby="score-message">
+            <button id="post-score" class="button button--primary" type="submit">Post my score</button>
+        </div>
+        <p id="score-message" class="score-message" role="status" aria-live="polite"></p>
+    </form>
+
+    <p class="actions">
+        <button id="new-game" class="button" type="button">Start a new game</button>
+    </p>
+</main>
+
+<footer class="site-footer">
+    <p>
+        Duke artwork from the
+        <a href="https://github.com/openjdk/duke">OpenJDK Duke project</a>.
+        API documentation at <a href="/openapi/ui">/openapi/ui</a>.
+    </p>
+</footer>
+
+<script src="js/game.js"></script>
+</body>
+</html>

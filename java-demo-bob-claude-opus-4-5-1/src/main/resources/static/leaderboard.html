@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaderboard – Guess the Number with Duke</title>
+    <style>
+        :root {
+            --bg: #f0f4ff;
+            --surface: #ffffff;
+            --primary: #1a56db;
+            --text: #111928;
+            --muted: #6b7280;
+            --border: #d1d5db;
+            --radius: 12px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+        header {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        header h1 { font-size: 1.4rem; font-weight: 700; }
+        header a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        header a:hover { text-decoration: underline; }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+        }
+        h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+        .empty {
+            text-align: center;
+            color: var(--muted);
+            padding: 2rem 0;
+            font-size: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+        th {
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 2px solid var(--border);
+            color: var(--muted);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        td {
+            padding: 0.6rem 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+        tr:last-child td { border-bottom: none; }
+        .rank { font-weight: 700; width: 3rem; }
+        .guesses { width: 7rem; }
+        #refresh-btn {
+            margin-top: 1.25rem;
+            padding: 0.55rem 1.1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: transparent;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text);
+        }
+        #refresh-btn:hover { background: var(--bg); }
+    </style>
+</head>
+<body>
+<header>
+    <h1>🏆 Leaderboard</h1>
+    <a href="/">← Play</a>
+</header>
+
+<main class="card">
+    <h2>Top 10 – Fewest Guesses</h2>
+    <div id="board-content" role="region" aria-live="polite">
+        <p class="empty">Loading…</p>
+    </div>
+    <button id="refresh-btn" type="button">Refresh</button>
+</main>
+
+<script>
+    async function loadLeaderboard() {
+        const content = document.getElementById('board-content');
+        content.innerHTML = '<p class="empty">Loading…</p>';
+
+        try {
+            const res = await fetch('/api/leaderboard');
+            const entries = await res.json();
+
+            if (!res.ok || !Array.isArray(entries) || entries.length === 0) {
+                content.innerHTML = '<p class="empty">No scores have been posted yet. Be the first to win!</p>';
+                return;
+            }
+
+            const rows = entries.map(e => `
+                <tr>
+                    <td class="rank">#${e.rank}</td>
+                    <td>${escapeHtml(e.playerName)}</td>
+                    <td class="guesses">${e.guessCount} ${e.guessCount === 1 ? 'guess' : 'guesses'}</td>
+                </tr>
+            `).join('');
+
+            content.innerHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Guesses</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            `;
+        } catch {
+            content.innerHTML = '<p class="empty">Could not load the leaderboard. Check your connection.</p>';
+        }
+    }
+
+    function escapeHtml(str) {
+        return str
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    document.getElementById('refresh-btn').addEventListener('click', loadLeaderboard);
+    loadLeaderboard();
+</script>
+</body>
+</html>

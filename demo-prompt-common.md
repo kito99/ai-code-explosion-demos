@@ -1,8 +1,7 @@
 # Shared demo instructions
 
-These instructions are the same for every demo in this repository. The prompt
-that sent you here names the application stack to build and the project name
-prefix to use; everything else is below.
+These instructions are the same for every demo in this repository. They add to
+the prompt that sent you here, which supplies the project name prefix to use.
 
 ## Project name
 
@@ -16,13 +15,13 @@ most recent matching demo is `java-demo-claude-code-opus-5_1`, the new folder is
 `java-demo-claude-code-opus-5_2`. If no demo exists with the same prefix, agent
 harness, and model, use the suffix `1`.
 
-Use that same folder name as the build artifact id, so the output of a build says
-which demo produced it. Carry it through everything derived from the artifact id
-as well: the packaged jar or WAR name, any server configuration that has to
-reference that file by name, container names in `compose.yaml`, and the
-OpenTelemetry service name. Leave Java package names out of this, since a folder
-name containing hyphens and a digit is not a legal package; `com.example` and a
-short app-specific segment are fine there.
+Use that same folder name as the build artifact id, so the output of a build
+says which demo produced it. Carry it through everything derived from the
+artifact id as well: the packaged jar or WAR name, any server configuration
+that has to reference that file by name, container names in `compose.yaml`,
+and the OpenTelemetry service name. Leave Java package names out of this,
+since a folder name containing hyphens and a digit is not a legal package;
+`com.example` and a short app-specific segment are fine there.
 
 ## Database
 
@@ -33,11 +32,8 @@ Commit a `compose.yaml` in the project folder so the database starts with a
 single `docker compose up -d`. Give the database name, user, and password the
 values the app already defaults to, so a fresh clone runs with no setup.
 
-How the schema gets created is up to the stack. Generating it from mapped
-classes is fine where the stack offers that; a committed `schema.sql` or a
-migration tool is fine where it does not. Either way, a fresh database must end
-up with the right tables without a manual step, and the README must say which
-approach the app took.
+A fresh database must end up with the right tables without a manual step, and
+the README must say how the schema gets created.
 
 ## Telemetry
 
@@ -49,14 +45,10 @@ Do not add a collector to `compose.yaml`. NFR-6 only requires that the
 destination be configurable, so record in the README which property to change,
 and the OTLP endpoint to set, for pointing the app at a real collector later.
 
-Use whatever OpenTelemetry support the stack provides rather than wiring up an
-exporter by hand.
-
 ## Tests
 
 The test suite must run on a clean machine without anyone starting a database by
-hand, so tests provision their own. Use Testcontainers or the equivalent the
-stack provides.
+hand, so tests provision their own. Use Testcontainers or an equivalent library.
 
 ## Files to copy
 

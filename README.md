@@ -7,16 +7,16 @@ models and the results compared side by side.
 
 ## Repo contents
 
-| File                    | Description                                                         |
-|-------------------------|---------------------------------------------------------------------|
-| `BRD.md`                | The requirements every demo is built from.                          |
-| `java-prompt.txt`       | Build the app in plain Java.                                        |
-| `jakarta-ee-prompt.txt` | Build the app with OpenLiberty and Jakarta EE.                      |
-| `demo-prompt-common.md` | The instructions every prompt shares.                               |
-| `AGENTS.md`             | The coding conventions agents follow. `CLAUDE.md` links to it.      |
-| `.mcp.json`             | The Context7 MCP server for Claude Code                             |
-| `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                 |
-| `.skills/`              | The Context7 skill. Both harnesses symlink to it.                   |
+| File                    | Description                                                                        |
+|-------------------------|------------------------------------------------------------------------------------|
+| `BRD.md`                | The requirements every demo is built from.                                         |
+| `java-prompt.txt`       | Build the app using Java with no specified stack.                                  |
+| `jakarta-ee-prompt.txt` | Build the app using Java with Jakarta EE and MicroProfile running on Open Liberty. |
+| `demo-prompt-common.md` | The instructions every prompt shares.                                              |
+| `AGENTS.md`             | The coding conventions agents follow. `CLAUDE.md` links to it.                     |
+| `.mcp.json`             | The Context7 MCP server for Claude Code                                            |
+| `.bob/mcp.json`         | The Context7 MCP server for IBM Bob                                                |
+| `.skills/`              | The Context7 skill. Both harnesses symlink to it.                                  |
 
 Each prompt specifies only the the stack to build, the project name prefix to
 use, and a pointer to `demo-prompt-common.md` for everything else. That keeps the

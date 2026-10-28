@@ -1,6 +1,9 @@
-Generate an app based on the BRD.md file in this folder using Open Liberty, 
-Jakarta EE 11, and MicroProfile 7.1 for the backend. Always favor APIs from 
-those rather than hand-rolling a solution or using another library, if possible.
+Generate an app based on the BRD.md file in this folder using Open Liberty,
+Jakarta EE 11, and MicroProfile 7.1 for the backend. Always favor APIs from
+those specifications rather than hand-rolling a solution or using another
+library. Example APIs are Jakarta Validation (aka Bean Validation),
+Jakarta Data, Jakarta REST, MicroProfile Telemetry, and MicroProfile OpenAPI,
+but you can use other recent Jakarta EE or MicroProfile APIs as well.
 
 Use the project name prefix "jakarta-ee".
 
